@@ -1,0 +1,378 @@
+\documentclass{beamer}
+\usepackage[brazil]{babel}
+\usepackage[latin1]{inputenc}
+\usepackage[all]{xy}
+\usepackage{stmaryrd}
+\usepackage{verbatim}
+\usepackage{graphicx}
+\usepackage{indentfirst}
+\usepackage{float}
+\usepackage{psfrag}
+
+\usepackage{stmaryrd}
+
+\mode<presentation>{
+  
+  \usepackage{beamerthemesplit} 
+  %\usetheme[secheader]{Madrid}
+  %\usetheme{Antibes}
+  \usetheme{Warsaw}
+  %\usecolortheme{seagull}
+  %\usecolortheme{lily}
+  \usepackage{pgf,pgfarrows,pgfnodes,pgfautomata,pgfheaps,pgfshade}
+  \beamertemplatetransparentcovereddynamic
+  \beamertemplateballitem
+  \beamertemplatefootpagenumber
+  \setbeamertemplate{navigation symbols}{} 
+  %\useoutertheme{infolines} 
+  %\setbeamercolor{title}{fg=red!80!black}
+  %\setbeamercolor{normal text}{fg=red!80}
+}
+%
+\def\red{\color[rgb]{0.7,0,0}}
+\def\green{\color[rgb]{0,.8,0}}
+\def\darkgreen{\color[rgb]{0.1,0.4,0.0}}
+\let\dgreen\darkgreen
+\def\blue{\color[rgb]{0,0,.8}}
+\def\yellow{\color[rgb]{1,1,0}}
+\def\black{\color[rgb]{0,0,0}}
+
+\def\pink{\color[rgb]{1,0,1}}
+\def\brown{\color[rgb]{.5,.1,.3}}
+\def\lilaz{\color[rgb]{.5,0,.5}}
+\def\hmmm{\color[rgb]{.3,.1,.5}}
+\def\magenta{\color[rgb]{.6,.05,.05}}
+
+\title{Teoria da Computação \\ {Tese de Church Turing}}
+\author{{Leonardo~Takuno}\\
+\texttt{\{leonardo.takuno@gmail.com\}}}
+\date{{\dgreen Centro Universitário Senac}}
+
+
+\begin{document}
+%\maketitle				% OPTIONAL
+
+\pgfdeclareimage[height=1.0cm]{logo}{logo.eps}
+\logo{\pgfuseimage{logo}}
+
+\frame{\titlepage}
+
+\frame{
+\frametitle{Sumário}
+\tableofcontents
+}
+
+\AtBeginSection[]
+{
+ \begin{frame}
+  \frametitle{Sumário}
+  \tableofcontents[currentsection]
+ \end{frame}
+}
+\section{Introdução}
+\begin{frame} \frametitle{Apresentação}
+\begin{itemize}
+	\item Capítulo 3
+	
+\begin{itemize}
+	\item Tese de Church-Turing
+	\item Máquinas de Turing
+\end{itemize}
+\end{itemize}
+\end{frame} 
+%
+
+
+\begin{frame} \frametitle{Até agora ...}
+\begin{itemize}
+	\item Linguagens formais e autômatos
+	
+\begin{itemize}
+	\item Autômatos Finitos
+	
+\begin{itemize}
+	\item Desvantagem: não tem memória.
+\end{itemize}
+	\item Autômato de Pilha
+\begin{itemize}
+	\item Desvantagem: pilha é muito restrita.
+\end{itemize}
+\end{itemize}
+
+\item Algumas tarefas muito simples estão muito além das capacidades desses modelos.
+\item Portanto, eles são demasiado restritos para servir como modelos de computadores de propósito geral.
+\end{itemize}
+
+\end{frame}
+\section{Máquina de Turing}
+\begin{frame} \frametitle{Máquina de Turing}
+\begin{itemize}
+	\item Em 1936, Alan Turing introduziu um modelo abstrato para computação no seu artigo ``\textit{On Computable Numbers, with an application to Entscheidungsproblem}''
+	\item Nessa mesma época, Alonzo Church publicou idéias e resultados similares (Cálculo lambda).
+	\item Entretanto, o modelo de Turing tornou-se o modelo teórico padrão para a Ciência da Computação.
+\end{itemize}
+\end{frame} 
+
+
+\begin{frame} \frametitle{Máquina de Turing}
+Uma máquina de Turing é estruturalmente similar a um autômato finito, mas com uma fita ilimitada como memória.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=.8\textwidth]{fig2.eps}
+\end{figure}
+
+\end{frame}
+
+\begin{frame} \frametitle{Máquina de Turing}
+A seguinte lista resume as diferenças entre autômatos finitos e máquinas de Turing
+
+\begin{enumerate}
+	\item Uma máquina de Turing pode tanto escrever sobre a fita quanto ler a partir dela.
+	\item A cabeça de leitura-escrita pode mover-se tanto para a esquerda quanto para a direita.
+	\item A fita é infinita.
+	\item Os estados especiais para rejeitar e aceitar fazem efeito imediatamente. 
+\end{enumerate}
+\end{frame}
+
+\begin{frame} \frametitle{Máquina de Turing}
+Construir um máquina de Turing $M_1$, que testa se uma string é uma membro da linguagem $B = \{w\#w | w \in \{0,1\}^*\}.$
+Isto é, se alguma string $w \in B$ então aceite senão rejeite. Assuma que $w$ é carregado na fita antes de executar a máquina; a cadeia de entrada parecerá como : $w = 101\#101$
+$$101\#101\sqcup$$
+\end{frame}
+
+
+\begin{frame} \frametitle{Máquina de Turing}
+$M_1$ ``sobre a cadeia de entrada $w$
+\begin{enumerate}
+	\item Faça um zigue-zague ao longo da fita checando posições correspondentes de ambos os lados do símbolo $\#$ para verificar se elas contêm o mesmo símbolo. Se elas não contêm, ou se nenhum $\#$ for encontrado, \textit{rejeite}. Marque os símbolos à medida que eles são verificados para manter registro de quais símbolos têm correspondência.
+	\item Quando todos os símbolos à esquerda do $\#$ tiverem sido marcados, verifique a existência de algum símbolo
+remanescente à direita do $\#$. Se resta algum símbolo, \textit{rejeite}; caso contrário, \textit{aceite}.''
+\end{enumerate}
+\end{frame}
+
+\begin{frame} \frametitle{Máquina de Turing}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=.8\textwidth]{fig3.eps}
+\end{figure}
+\end{frame}
+
+\begin{frame} \frametitle{Definição Formal}
+\begin{center}
+\begin{tabular}{|p{10.0cm}|}
+\hline
+Uma \textbf{máquina de Turing} é uma 7-upla (Q, $\Sigma$, $\Gamma$, $\delta$, $q_0$ , $q_{aceita}$, $q_{rejeita}$), onde 
+Q, $\Sigma$, $\Gamma$, são todos conjuntos finitos e 
+\begin{enumerate}
+	\item Q é o conjunto de estados
+	\item $\Sigma$ é o alfabeto de entrada não contém o simbolo em branco $\sqcup$
+	\item $\Gamma$ é o alfabeto da fita, onde $\sqcup \in \Gamma$, e $\Sigma \subseteq \Gamma$
+	\item $\delta$ : $Q \times \Gamma \longrightarrow Q \times \Gamma \times \{L, R\}$ é a função de transição
+	\item $q_0 \in Q$ é o estado inicial.
+	\item $q_{aceita} \in Q$ é o estado de aceitação, e 
+	\item $q_{rejeita} \in Q$ é o estado de rejeição, onde $q_{rejeita} \neq q_{aceita}$
+\end{enumerate} \\
+\hline
+\end{tabular}
+\end{center}
+\end{frame}
+
+
+\begin{frame} \frametitle{Máquina de Turing}
+$L(M1) = \{w\#w | w \in \{0, 1\}^*\}$
+\begin{figure}[ht]
+\centering
+\includegraphics[width=.5\textwidth]{fig4.eps}
+\end{figure}
+Nota: Transições para o estado $q_{reject}$ são implícitos sobre o símbolo que não aparecem nos estados.
+\end{frame}
+
+\begin{frame} \frametitle{Exercício 1}
+$L(M1) = \{w\#w | w \in \{0, 1\}^*\}$
+\begin{figure}[ht]
+\centering
+\includegraphics[width=.5\textwidth]{fig4.eps}
+\end{figure}
+
+Identifique as componentes da definição da Máquina de Turing no grafo orientado acima.
+
+\end{frame}
+
+
+
+\begin{frame} \frametitle{Configurações}
+
+\begin{itemize}
+  \item O estado corrente, o conteúdo corrente da fita, e a localização da cabeça de leitura é chamado de \textbf{configuração}.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=.9\textwidth]{fig7.eps}
+\end{figure}  
+  
+    configuração: 1011$q_7$01111
+
+\end{itemize}
+\end{frame}
+
+\begin{frame} \frametitle{Configurações}
+
+\begin{itemize}
+
+	\item Sejam $u,v \in \Gamma^*$; $a,b,c \in \Gamma$; $q_i, q_j \in Q$ e M uma máquina de Turing com função de transição $\delta$.
+	
+\begin{itemize}
+	\item 	Dizemos que a configuração ``$uaq_ibv$'' produz a configuração ``$uacq_jv$'' se:
+	
+	$$\delta(q_i,b) = (q_j,c,R)$$
+	
+  \item 	Similarmente, ``$uaq_ibv$'' produz a configuração ``$uq_jacv$'' se:
+	
+	$$\delta(q_i,b) = (q_j,c,L)$$	
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame} \frametitle{Configurações}
+\begin{itemize}
+	\item \textbf{configuração inicial :} A MT está no estado $q_0$ com a cabeça de leitura situado na posição mais a direita da cadeia $w$: ``$q_0w$''
+	\item \textbf{configuração de parada :} um estado na qual a máquina está ou em estado de aceitação (\textbf{configuração de aceitação}) ou no estado de rejeição (\textbf{configuração de rejeição}):
+	
+\begin{itemize}
+	\item configuração de aceitação: ``$uq_{accept}v$''
+	\item configuração de rejeição: ``$uq_{reject}v$''
+\end{itemize}
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame} \frametitle{Configurações}
+\begin{itemize}
+	\item Uma máquina de Turing M aceita ou reconhece a entrada $w \in \Sigma^*$, se, e somente se, há uma seqüência finita de configurações $C_1, C_2, ..., C_k$ com 
+	
+\begin{itemize}
+	\item $C_1$ a configuração inicial: ``$q_0w$'';
+	\item para $i=1, ..., k-1$ $C_i$ produz $C_{i+1}$; 
+	\item $C_k$ é uma configuração de aceitação ``$uq_{accept}v$''.
+\end{itemize}
+
+\item A linguagem que consiste de todas as entradas que são aceitas por M é denotada por $L(M)$.
+\end{itemize}
+
+\end{frame}
+\section{Linguagem Turing-Reconhecível}
+
+\begin{frame} \frametitle{MT e Linguagem}
+
+\begin{center}
+\begin{tabular}{|p{9.0cm}|}
+\hline
+\textbf{Definição:} Chame uma linguagem de \textbf{Turing-reconhecível}, se alguma máquina de Turing a reco\-nhe\-ce.\\
+\hline
+\end{tabular}
+\end{center}
+
+\begin{itemize}
+	\item Um linguagem Turing-reconhecível muitas vezes é chamada de \textbf{linguagem recursivamente enumerável}.
+	\item Se $w \notin L$, a máquina pode parar em um estado de rejeição, ou pode entrar em loop indefinidamente.
+	\item Como distinguir entre um tempo de computação muito longa e um processamento que nunca pára?
+\end{itemize}
+\end{frame} 
+
+\section{Linguagem Turing-Decidível}
+\begin{frame} \frametitle{MT e Linguagem}
+O problema com MT que reconhecem uma linguagem é que elas podem entrar em loop para alguma entrada.\newline
+Queremos uma máquina que sempre pára. Chamamos tais máquinas de decisores.
+\begin{center}
+\begin{tabular}{|p{9.0cm}|}
+\hline
+\textbf{Definição:} 
+ Chame uma linguagem de \textbf{Turing-decidível} ou simplesmente decidível se alguma máquina de Tu\-ring a decide.\\
+\hline
+\end{tabular}
+\end{center}
+Decisores responderão se uma string pertence a linguagem ou não à linguagem. \newline
+NOTE: Toda linguagem decidível é Turing-reconhecível.
+
+Um linguagem decidível é muitas vezes chamada de \textbf{linguagem recursiva}.
+\end{frame}
+
+\begin{frame} \frametitle{$A = \{0^{2^n} | n \geq 0\}$}
+A linguagem consistindo em todas as cadeia de 0s cujo comprimento é uma potência de 2.
+
+\vspace{0.5cm} $M_2$ = ``Sobre a cadeia de entrada $w$:
+
+\begin{enumerate}
+	\item Faça uma varredura da esquerda para a direita na fita, marcando um 0 não, e outro, sim.
+	\item Se no estágio 1, a fita continha um único 0, aceite.
+	\item Se no estágio 1, a fita continha mais que um único 0 e o número de 0s era ímpar, rejeite
+	\item Retorne a cabeça para a extremidade esquerda da fita.
+	\item Vá para o estágio 1. 
+\end{enumerate}
+
+\end{frame}
+
+
+\begin{frame} 
+$A = \{0^{2^n} | n \geq 0\}$
+\begin{figure}[ht]
+\centering
+\includegraphics[width=.7\textwidth]{fig5.eps}
+\end{figure}
+
+\end{frame}
+
+\begin{frame} \frametitle{configurações}
+$A = \{0^{2^n} | n \geq 0\}$
+\begin{figure}[ht]
+\centering
+\includegraphics[width=.9\textwidth]{fig6.eps}
+\end{figure}
+
+\end{frame}
+
+\begin{frame} \frametitle{Exercício 2}
+a) Obtenha as componentes da definição da Máquina de Turing $M_2$.
+
+
+b) Dê a sequência de configurações de $M_2$ sobre a cadeia 000.
+\end{frame}
+
+
+
+\section{Tese de Church-Turing}
+\begin{frame} \frametitle{Tese de Church-Turing}
+Por que estudar máquinas de Turing?
+\begin{center}
+\begin{tabular}{|c|}
+\hline
+Noção intuitiva de algoritmos    \\
+igual \\
+Algoritmos de máquinas de Turing\\
+\hline
+\end{tabular}
+\end{center}
+Esta equivalência não pode ser provada, até agora nenhum algoritmo foi encontrado que não pudesse ser implementado em uma máquina de Turing.
+\end{frame} 
+
+\begin{frame} \frametitle{Hierarquia de Linguagem}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=.7\textwidth]{fig1.eps}
+\end{figure}
+\end{frame}
+
+\section{Exercícios}
+\begin{frame} \frametitle{Exercícios}
+3) Construa a Máquina de Turing para a linguagem $L = 01^*0$. Apresente a descrição em algoritmo, o diagrama de máquina de Turing e a descrição formal.
+
+4) Construa a Máquina de Turing para a linguagem $L = 0^n1^n$. Apresente a descrição em algoritmo, o diagrama de máquina de Turing e a descrição formal.
+
+
+\end{frame}
+
+
+\end{document}
+

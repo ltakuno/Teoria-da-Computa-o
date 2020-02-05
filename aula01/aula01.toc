@@ -1,0 +1,7 @@
+\babel@toc {brazil}{}
+\beamer@sectionintoc {1}{Introdu\c c\~ao}{3}{0}{1}
+\beamer@sectionintoc {2}{M\'aquina de Turing}{6}{0}{2}
+\beamer@sectionintoc {3}{Linguagem Turing-Reconhec\IeC {\'\i }vel}{20}{0}{3}
+\beamer@sectionintoc {4}{Linguagem Turing-Decid\IeC {\'\i }vel}{22}{0}{4}
+\beamer@sectionintoc {5}{Tese de Church-Turing}{28}{0}{5}
+\beamer@sectionintoc {6}{Exerc\IeC {\'\i }cios}{31}{0}{6}
