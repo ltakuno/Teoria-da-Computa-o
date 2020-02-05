@@ -1,0 +1,4 @@
+\babel@toc {brazil}{}
+\beamer@sectionintoc {1}{PCP}{3}{0}{1}
+\beamer@sectionintoc {2}{Fun\c c\~oes comput\'aveis}{25}{0}{2}
+\beamer@sectionintoc {3}{Redutibilidade por Mapeamento}{28}{0}{3}

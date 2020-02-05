@@ -1,0 +1,889 @@
+\documentclass{beamer}
+\usepackage[brazil]{babel}
+\usepackage[latin1]{inputenc}
+\usepackage[all]{xy}
+\usepackage{stmaryrd}
+\usepackage{verbatim}
+\usepackage{graphicx}
+\usepackage{indentfirst}
+\usepackage{float}
+\usepackage{psfrag}
+
+\usepackage{stmaryrd}
+
+\mode<presentation>{
+  
+  \usepackage{beamerthemesplit} 
+  %\usetheme[secheader]{Madrid}
+  %\usetheme{Antibes}
+ % \usetheme{Warsaw}
+  %\usecolortheme{seagull}
+  %\usecolortheme{lily}
+  \usepackage{pgf,pgfarrows,pgfnodes,pgfautomata,pgfheaps,pgfshade}
+  \beamertemplatetransparentcovereddynamic
+  \beamertemplateballitem
+  \beamertemplatefootpagenumber
+  \setbeamertemplate{navigation symbols}{} 
+  %\useoutertheme{infolines} 
+  %\setbeamercolor{title}{fg=red!80!black}
+  %\setbeamercolor{normal text}{fg=red!80}
+}
+%
+\def\red{\color[rgb]{0.7,0,0}}
+\def\green{\color[rgb]{0,.8,0}}
+\def\darkgreen{\color[rgb]{0.1,0.4,0.0}}
+\let\dgreen\darkgreen
+\def\blue{\color[rgb]{0,0,.8}}
+\def\yellow{\color[rgb]{1,1,0}}
+\def\black{\color[rgb]{0,0,0}}
+
+\def\pink{\color[rgb]{1,0,1}}
+\def\brown{\color[rgb]{.5,.1,.3}}
+\def\lilaz{\color[rgb]{.5,0,.5}}
+\def\hmmm{\color[rgb]{.3,.1,.5}}
+\def\magenta{\color[rgb]{.6,.05,.05}}
+
+\title{Teoria da Computação \\ {Complexidade de Tempo\\ parte 3}}
+\author{{Leonardo~Takuno}\\
+\texttt{\{leonardo.takuno@gmail.com\}}}
+\date{{\dgreen Centro Universitário Senac}}
+
+
+\begin{document}
+%\maketitle				% OPTIONAL
+
+\pgfdeclareimage[height=1.0cm]{logo}{logo.eps}
+\logo{\pgfuseimage{logo}}
+
+\frame{\titlepage}
+
+\frame{
+\frametitle{Sumário}
+\tableofcontents
+}
+
+\AtBeginSection[]
+{
+ \begin{frame}
+  \frametitle{Sumário}
+  \tableofcontents[currentsection]
+ \end{frame}
+}
+
+\section{Teorema de Cook-Levin}
+
+\begin{frame} \frametitle{ Teorema de Cook-Levin }
+Nos anos de 1970 Stephen Cook e Leonid Levin descobriram, independentemente, que existem certos problemas em NP cuja complexidade está relacionada a todos os outros problemas da classe NP - estes problemas são chamados de NP-Completos.
+
+\end{frame}
+
+\begin{frame} \frametitle{ Teorema de Cook-Levin }
+Nós vimos anteriormente que os problemas NP-Completos estão relacionados a outros problemas NP via reduções polinomiais.
+
+\end{frame}
+
+\begin{frame} \frametitle{ Problema da satisfabilidade (SAT) }
+
+Uma fórmula booleana é uma expressão que envolve variáveis booleanas ($x$, $y$, etc) e operações ($\wedge, \vee, \neg$, onde $\neg x = \overline{x}$).
+
+$$\phi = (\overline{x} \wedge y) \vee (x \wedge \overline{z})$$
+
+Uma fórmula booleana é verdadeira se alguma atribuição de variáveis ($true$ ou $false$) torna o valor da fórmula igual a $true$.
+
+\end{frame}
+
+\begin{frame} \frametitle{ Problema da satisfabilidade (SAT) }
+
+
+$$\phi = (\overline{x} \wedge y) \vee (x \wedge \overline{z})$$
+
+É satisfazível pois a atribuição
+
+$$\begin{array}{c}
+x = false, \\
+y = true, \\ 
+z = false.
+\end{array}$$
+
+faz $\phi$ valor $true$.
+
+\vspace{0.7cm} Dizemos que a atribuição satisfaz $\phi$.
+\end{frame}
+
+\begin{frame} \frametitle{ Problema da satisfabilidade (SAT) }
+O \textbf{problema da satisfabilidade} é testar se uma fórmula booleana é satisfatível. 
+
+$$SAT = \{\langle \phi \rangle | \phi \textrm{ é uma fórmula booleana satisfatível} \}$$ 
+\end{frame}
+
+\begin{frame} \frametitle{ Teorema de Cook-Levin }
+\begin{center}
+\begin{tabular}{|p{10.0cm}|}
+\hline
+\textbf{Teorema (Cook-Levin)}: SAT é NP-Completo
+\\
+\hline
+\end{tabular}
+\end{center}
+\textbf{Idéia da prova:}
+\begin{itemize}
+\item Primeiro mostramos que $SAT \in NP$
+\item Para qualquer linguagem $A \in NP$ mostramos que $A \leq_p SAT$
+\end{itemize}
+\end{frame}
+
+
+\begin{frame} \frametitle{ Teorema de Cook-Levin  }
+\begin{center}
+\begin{tabular}{|p{10.0cm}|}
+\hline
+\textbf{Teorema (Cook-Levin)}: SAT é NP-Completo
+\\
+\hline
+\end{tabular}
+\end{center}
+\textbf{Prova:}
+\begin{itemize}
+\item Primeiro mostramos que $SAT \in NP$
+\item Uma máquina de tempo polinomial não-determinístico pode adivinhar uma atribuição para uma dada fórmula $\phi$ e aceitar se a atribuição satisfaz $\phi$
+\end{itemize}
+\end{frame}
+
+\begin{frame} \frametitle{ Teorema de Cook-Levin  }
+\begin{center}
+\begin{tabular}{|p{10.0cm}|}
+\hline
+\textbf{Teorema (Cook-Levin)}: SAT é NP-Completo
+\\
+\hline
+\end{tabular}
+\end{center}
+\textbf{Prova (continuação):}
+\begin{itemize}
+\item Precisamos mostrar que $A \leq_p SAT$ para todo $A \in NP$.
+\item Isto é feito por simular as computações de MTN decidindo $A$ sobre alguma string $w$ usando fórmulas booleanas tal que 
+
+$$w \in A \Leftrightarrow f(w) \in SAT$$
+
+onde $f$ converte a  string $w$ na fórmula booleana $f(w)$.
+\end{itemize}
+\end{frame}
+
+\begin{frame} \frametitle{ Teorema de Cook-Levin }
+\begin{center}
+\begin{tabular}{|p{10cm}|}
+\hline
+\textbf{Definição:} Um \textbf{tableau} para N sobre $w$ é uma tabela $n^k \times n^k$ cujas linhas são configurações de um ramo de computação de N sobre $w$.
+
+\begin{enumerate}
+	\item $C_1$ é a configuração inicial de N sobre $w$
+	\item $C_{n^k}$ ( a última linha ) é uma configuração de aceitação.
+	\item Para toda linha $i$, $C_i$ pode produzir $C_{i+1}$ de acordo com as regras de N.
+\end{enumerate}
+\\
+\hline
+\end{tabular}
+\end{center}
+\end{frame}
+
+\begin{frame} \frametitle{ Teorema de Cook-Levin }
+\begin{figure}[ht]
+\centering
+\includegraphics[width=.8\textwidth]{fig01}
+\end{figure}
+\end{frame}
+
+
+\begin{frame} \frametitle{ Teorema de Cook-Levin  }
+\begin{center}
+\begin{tabular}{|p{10.0cm}|}
+\hline
+\textbf{Teorema (Cook-Levin)}: SAT é NP-Completo
+\\
+\hline
+\end{tabular}
+\end{center}
+
+\begin{itemize}
+	\item Todo \textit{tableau} representa um computação de MT sobre a entrada $w$.
+	\item Desde que N é não-determinístico, podem existir muitas computações.
+	\item Consequentemente, pode haver muitos tableaus. Cada um correspondente a um ramo específico de computação.
+	\item Um tableau de \textbf{aceitação} para N sobre $w$ corresponde a um ramo de computação de aceitação de N sobre $w$.
+	
+\end{itemize}
+\end{frame}
+
+
+\begin{frame} \frametitle{ Teorema de Cook-Levin  }
+\begin{center}
+\begin{tabular}{|p{10.0cm}|}
+\hline
+\textbf{Teorema (Cook-Levin)}: SAT é NP-Completo
+\\
+\hline
+\end{tabular}
+\end{center}
+
+
+\begin{itemize}
+	\item Defina uma redução em tempo polinomial $f$ de A para SAT. Sobre a entrada $w$, a redução produz a fórmula $\phi$. Segue a descrição da redução:
+	
+\begin{itemize}
+	\item A MT N tem um conjunto $Q$ de estados e uma fita de alfabeto $\Gamma$
+	\item O conteúdo da célula é o conjunto $C = Q \cup \Gamma \cup \{ \# \}$
+	\item Para cada $i$ e $j$ entre $1$ e $n^k$ e para cada $s \in C$, defina uma variável booleana da seguinte maneira:
+	
+	\begin{displaymath}
+x_{i,j,s}=\left\{ \begin{array}{ll}
+true & \textrm{se } celula[i,j]=s\\
+false & \textrm{caso contrário}
+\end{array}\right.
+\end{displaymath}
+
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+
+\begin{frame} \frametitle{ Teorema de Cook-Levin  }
+\begin{center}
+\begin{tabular}{|p{10.0cm}|}
+\hline
+\textbf{Teorema (Cook-Levin)}: SAT é NP-Completo
+\\
+\hline
+\end{tabular}
+\end{center}
+
+\begin{itemize}
+	\item Vamos representar um tableau como uma fórmula $\phi$. 
+	\item Para obter $\phi$, nós tomamos a conjunção de quatro sub-fórmulas.
+	
+	$$\phi = \phi_{celula} \wedge \phi_{inicio} \wedge \phi_{movimento} \wedge \phi_{aceita} $$
+	
+\begin{itemize}
+	\item $\phi_{celula}$: cada célula do tableau contém exatamente um símbolo $s \in Q \cup \Gamma \cup \{ \# \}$
+	\item $\phi_{inicio}$: a primeira linha contém um $q_0$ seguido por $w$ e seguido por branco.
+	\item $\phi_{movimento}$: cada passo de computação conforme as regras de N.
+	\item $\phi_{aceita}$: $C_{n^k}$ é uma configuração de aceitação.
+\end{itemize}
+	
+
+\end{itemize}
+\end{frame}
+
+
+\begin{frame} \frametitle{ Teorema de Cook-Levin  }
+\begin{center}
+\begin{tabular}{|p{10.0cm}|}
+\hline
+\textbf{Teorema (Cook-Levin)}: SAT é NP-Completo
+\\
+\hline
+\end{tabular}
+\end{center}
+$$\phi = \phi_{celula} \wedge \phi_{inicio} \wedge \phi_{movimento} \wedge \phi_{aceita} $$
+
+\begin{itemize}
+	
+	\item Se as quatro sub-fórmulas são satisfeitas, então há um tableau válido.
+	
+	\item Agora, a primeira coisa que devemos garantir de modo a obter uma correspondência entre uma atribuição e um tableau é que a atribuição ligue exatamente uma variável para cada célula.
+
+\end{itemize}
+\end{frame}
+
+
+\begin{frame} \frametitle{ Teorema de Cook-Levin  }
+\begin{center}
+\begin{tabular}{|p{10.0cm}|}
+\hline
+\textbf{Teorema (Cook-Levin)}: SAT é NP-Completo
+\\
+\hline
+\end{tabular}
+\end{center}
+\begin{itemize}	
+	
+	\item A fórmula $\phi_{celula}$ garante esse requisito:
+	$$\phi_{celula} = \bigwedge_{1 \leq i,j \leq n^k} \left[\biggl(  \bigvee_{s \in C} x_{i,j,s} \biggr) \wedge \biggl( \bigwedge_{\substack{s,t \in C \\ s \neq t}} \biggl( \overline{x_{i,j,s}} \vee \overline{x_{i,j,t}} \biggr) \biggr) \right]$$
+
+\begin{itemize}
+	\item Na fórmula acima, o primeiro $\wedge$ significa ``cada célula do tableau''
+	\item O primeiro parênteses indica ``contém pelo menos um símbolo''
+	\item O segundo parênteses estipula que ``não mais que uma variável está ligada para cada célula''.
+\end{itemize}
+	
+	\item Isto pode ser produzido em $O(n^{2k})$ passos.
+\end{itemize}
+\end{frame}
+
+
+\begin{frame} \frametitle{ Teorema de Cook-Levin  }
+\begin{center}
+\begin{tabular}{|p{10.0cm}|}
+\hline
+\textbf{Teorema (Cook-Levin)}: SAT é NP-Completo
+\\
+\hline
+\end{tabular}
+\end{center}
+\begin{itemize}
+	\item A fórmula $\phi_{inicio}$ garante que a primeira linha da tabela é a configuração inicial:
+	
+	\begin{eqnarray}
+\phi_{inicio} & = & x_{1,1,\#} \wedge x_{1,2,q_0} \wedge \nonumber \\
+& & x_{1,3,w_1} \wedge x_{1,4,w_2} \wedge \cdots \wedge x_{1,n+2,w_n} \wedge  \nonumber \\
+& & x_{1,n+3,\sqcup} \wedge \cdots \wedge x_{1,n^k - 1,\sqcup} \wedge x_{1,n^k,\#}\nonumber 
+\end{eqnarray}
+
+  \item Isto pode ser produzido em tempo polinomial.
+\end{itemize}
+\end{frame}
+
+
+\begin{frame} \frametitle{ Teorema de Cook-Levin  }
+\begin{center}
+\begin{tabular}{|p{10.0cm}|}
+\hline
+\textbf{Teorema (Cook-Levin)}: SAT é NP-Completo
+\\
+\hline
+\end{tabular}
+\end{center}
+
+\begin{itemize}
+	\item A fórmula $\phi_{aceita}$ garante que uma configuração de aceitação ocorre no tableau.
+	
+	$$\phi_{aceita}= \bigvee_{1 \leq i,j \leq n^k} x_{i,j,q_{aceita}}.$$
+	
+	\item Isto pode ser produzido em tempo polinomial
+\end{itemize}
+\end{frame}
+
+
+\begin{frame} \frametitle{ Teorema de Cook-Levin  }
+\begin{center}
+\begin{tabular}{|p{10.0cm}|}
+\hline
+\textbf{Teorema (Cook-Levin)}: SAT é NP-Completo
+\\
+\hline
+\end{tabular}
+\end{center}
+
+\begin{itemize}
+	\item A fórmula $\phi_{movimento}$ assegura que cada linha da tabela corresponde a uma configuração que segue legalmente da configuração da linha precedente conforme as regras de $N$.
+	\item Uma janela $2 \times 3$ é \textbf{legal} se ela não viola as ações especificadas pela função de transição de $N$.
+\end{itemize}
+\end{frame}
+
+
+\begin{frame} \frametitle{ Teorema de Cook-Levin  }
+\begin{center}
+\begin{tabular}{|p{10.0cm}|}
+\hline
+\textbf{Teorema (Cook-Levin)}: SAT é NP-Completo
+\\
+\hline
+\end{tabular}
+\end{center}
+
+\begin{itemize}
+	\item Exemplo : $\delta(q_1,a) = \{q_1, b, D\}$ e $\delta(q_1,b) = \{(q_2,c,E), (q_2,a,D)\}$
+\end{itemize}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=.9\textwidth]{fig02}
+\end{figure}
+Janelas legais
+\end{frame}
+
+
+\begin{frame} \frametitle{ Teorema de Cook-Levin  }
+\begin{center}
+\begin{tabular}{|p{10.0cm}|}
+\hline
+\textbf{Teorema (Cook-Levin)}: SAT é NP-Completo
+\\
+\hline
+\end{tabular}
+\end{center}
+\begin{itemize}
+	\item As janelas mostradas abaixo não são legais para a máquina $N$.
+\end{itemize}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=.9\textwidth]{fig03}
+\end{figure}
+\end{frame}
+
+\begin{frame} \frametitle{ Teorema de Cook-Levin  }
+
+\begin{center}
+\begin{tabular}{|p{10.0cm}|}
+\hline
+\textbf{Afirmação}: Se a linha superior da tabela for a configuração inicial e toda janela na tabela for legal, cada linha da tabela é uma configuração que segue legalmente da precedente.
+\\
+\hline
+\end{tabular}
+\end{center}
+\textbf{Prova:} 
+
+\begin{itemize}
+\item Considere as configurações $C_i$ e $C_{i+1}$, chamadas de superior e inferior, respectivamente. 
+\item Na configuração superior, toda célula que não é adjacente a um símbolo de estado e que não contém um símbolo de fronteira $\#$, é a célula central superior em uma janela cuja linha superior  não contém nenhum estado.
+\item Por conseguinte, esse símbolo deve aparecer imutável na posição central inferior da janela. Logo, ele aparece na mesma posição na configuração inferior.
+\end{itemize}
+
+\end{frame}
+
+\begin{frame} \frametitle{ Teorema de Cook-Levin  }
+
+\begin{center}
+\begin{tabular}{|p{10.0cm}|}
+\hline
+\textbf{Afirmação}: Se a linha superior da tabela for a configuração inicial e toda janela na tabela for legal, cada linha da tabela é uma configuração que segue legalmente da precedente.
+\\
+\hline
+\end{tabular}
+\end{center}
+\textbf{Prova (continuação):}
+
+\begin{itemize}
+\item A janela contendo o símbolo de estado na célula central superior garante que as três posições correspondentes sejam atualizadas consistentemente com a função de transição.
+\item Consequentemente, se a configuração superior for uma configuração legal, o mesmo acontece com a configuração inferior, e a inferior segue a superior conforme as regras de N. 
+\end{itemize} 
+ 
+\end{frame}
+
+\begin{frame} \frametitle{ Teorema de Cook-Levin  }
+\begin{center}
+\begin{tabular}{|p{10.0cm}|}
+\hline
+\textbf{Teorema (Cook-Levin)}: SAT é NP-Completo
+\\
+\hline
+\end{tabular}
+\end{center}
+
+\textbf{$\cdots$ voltando à construção de $\phi_{movimento}$}
+
+
+\begin{itemize}
+
+	\item $\phi_{movimento}$ estipula que todas as janelas no tableau são legais. Cada janela contém seis células, que podem ser inicializada de um número fixo de maneiras para originar uma janela legal.
+
+	
+	$$\phi_{movimento}= \bigwedge_{1 < i \leq n^k, 1 < j < n^k} \left(\mbox{a janela (} i,j \mbox{) é legal}\right)$$
+	
+	
+\end{itemize} 
+ 
+\end{frame}
+
+\begin{frame} \frametitle{ Teorema de Cook-Levin  }
+\begin{center}
+\begin{tabular}{|p{10.0cm}|}
+\hline
+\textbf{Teorema (Cook-Levin)}: SAT é NP-Completo
+\\
+\hline
+\end{tabular}
+\end{center}
+\begin{itemize}
+  \item Nessa fórmula, substituímos o texto ``a janela ($i,j$) é legal'' pela fórmula a seguir :
+  
+  Escrevemos o conteúdo de seis células de uma janela como $a_1, ..., a_6$
+  
+\end{itemize}
+\hspace{-0.5cm} $\displaystyle \bigvee_{a_1, ..., a_6}\left( x_{i,j-1,a_1}\wedge x_{i,j,a_2}\wedge x_{i,j+1,a_3}\wedge x_{i+1,j-1,a_4} \wedge x_{i+1,j,a_5}\wedge x_{i+1,j+1,a_6}\right) $
+  
+  \begin{itemize}
+ \item Requer tempo $O(n^{2k})$.
+\end{itemize}
+\end{frame}
+
+\begin{frame} \frametitle{ Teorema de Cook-Levin  }
+\begin{center}
+\begin{tabular}{|p{10.0cm}|}
+\hline
+\textbf{Teorema (Cook-Levin)}: SAT é NP-Completo
+\\
+\hline
+\end{tabular}
+\end{center}
+
+\begin{itemize}
+	\item Para resumir:
+	
+	
+\begin{itemize}
+	\item Se $w \in A \Rightarrow N$ aceita $w \Rightarrow \exists$ um tableau válido $\Rightarrow \phi(w)$ é satisfazível
+	\item Se $w \notin A \Rightarrow N$ rejeita $w \Rightarrow \not \exists$ um tableau válido $\Rightarrow \phi(w)$ não é satisfazível
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame} \frametitle{ Teorema de Cook-Levin  }
+\begin{center}
+\begin{tabular}{|p{10.0cm}|}
+\hline
+\textbf{Teorema (Cook-Levin)}: SAT é NP-Completo
+\\
+\hline
+\end{tabular}
+\end{center}
+
+
+\begin{itemize}
+	\item Para obter $\phi$, nós tomamos a conjunção de quatro sub-fórmulas.
+	
+	$$\phi = \phi_{celula} \wedge \phi_{inicio} \wedge \phi_{movimento} \wedge \phi_{aceita} $$
+	
+	\item Requer $O(n^{2k})$ de tempo e espaço: complexidade polinomial.
+	\item Conclusões:
+	
+\begin{itemize}
+	\item O mapeamento de $w$ para $\phi$ é uma redução de tempo polinomial do problema $A \in NP$ para $SAT$:
+	$$A \leq_p SAT \mbox{ para todo } A \in NP$$
+	
+	Como $SAT \in NP$, então $SAT$ é NP-Completa. $\boxempty$
+	
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\section{Problemas NP-Completos}
+
+\begin{frame} \frametitle{ $3SAT$ }
+
+\begin{itemize}
+  \item \textbf{Literal:} variável booleana ($x$) ou sua negação ($\overline{x}$) 
+  \item \textbf{Cláusula:} Um conjunto de literais conectados por OR, ex: $(x \vee \overline{y} \vee z)$
+	\item Uma fórmula $\phi$ está na \textbf{forma normal conjuntiva} (FNC), se houver cláusulas conectados por AND.
+	
+	Ex:
+	
+	
+	$$\phi(x,y,z) = (x \vee \overline{y}) \wedge (z) \wedge (\overline{z} \vee y \vee \overline{y})$$
+	
+Uma \textbf{3fnc-fórmula}	tem somente cláusulas com 3 literais:
+
+ $$3SAT =  \{ \langle \phi \rangle | \phi \mbox{ é uma 3fnc-fórmula satisfazível}\}$$
+\end{itemize}
+\end{frame}
+
+\begin{frame} \frametitle{ $3SAT$ }
+
+\begin{center}
+\begin{tabular}{|p{9.0cm}|}
+\hline
+\textbf{Teorema:} 
+
+\hspace{1cm}$3SAT  \in$ NP-Completo
+ \\\\
+\hline
+\end{tabular}
+\end{center}
+\textbf{Prova:} 
+\begin{itemize}
+	\item Mostramos isto ao construir uma redução de $SAT$ para $3SAT$
+	
+	\item Primeiro observe que $\phi \in SAT$ pode ser reescrito em FNC $\phi = c_1 \wedge c_2 \wedge \cdots \wedge c_m$ onde cada cláusula $c_i$ é uma disjunção de booleanos digamos $a_1, \cdots a_n$.
+	
+	\item Agora construimos uma redução $f : SAT \rightarrow 3SAT$ tal que $f(\phi) = \phi_{3SAT}$
+\end{itemize}
+\end{frame}
+
+\begin{frame} \frametitle{ $3SAT$ }
+
+\begin{itemize}
+\item Substituiremos cada $c_i$ em $\phi$ por uma coleção de cláusulas com 3 literais. Mais especificamente seja $c_i = a_1 \vee a_2 \vee \cdots \vee a_k$, onde cada $a_i$ é uma variável booleana, então
+
+\begin{itemize}
+\item $k = 1$: Aqui $c_i = a_1$. Use variáveis adicionais $z_1$ e $z_2$ para construir $3cfn$
+
+$(a_1 \vee z_1 \vee z_2) \wedge (a_1\vee \overline{z_1} \vee z_2)\wedge (a_1 \vee z_1 \vee \overline{z_2})\wedge (a_1 \vee \overline{z_1} \vee \overline{z_2})$
+
+\item $k = 2$: Aqui $c_i = (a_1 \vee a_2)$. Use variáveis adicionais $z_1$ e $z_2$ para construir $3cfn$
+
+$(a_1 \vee a_2 \vee z_1) \wedge (a_1 \vee a_2 \vee \overline{z_1})$
+\item $k = 3$: Aqui $c_i = (a_1 \vee a_2\vee a_3)$. Já está em $3cfn$, não há nada a fazer.
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame} \frametitle{ $3SAT$ }
+\begin{itemize}
+\item $k > 3$: Aqui $c_i = (a_1 \vee a_2\vee \cdots \vee a_k)$, use variáveis adicionais $z_1, z_2, \cdots z_{k-3}$ para construir as cláusulas em $3cnf$
+
+$$\begin{array}{r}
+(a_1 \vee a_2 \vee z_1) \; \wedge \\
+(\overline{z_1} \vee a_3 \vee z_2) \; \wedge \\
+(\overline{z_2} \vee a_4 \vee z_3) \; \wedge \\
+(\overline{z_3} \vee a_5 \vee z_4) \; \wedge \\
+\cdots \quad \wedge \\
+(\overline{z_{k-3}} \vee a_{k-1} \vee z_k) \\
+\end{array}$$
+\end{itemize}
+\end{frame}
+
+\begin{frame} \frametitle{ $3SAT$ }
+\begin{itemize}
+\item Mostramos que $f$ é uma redução de tempo polinomial. 
+\item Primeiro observe que o número máximo de variáveis que podem ocorrer em uma clásula $\phi$ é $n$. 
+\item Também observe que há $m$ clásulas.
+\item Portanto, o número máximo de conversões é limitado a $O(mn)$ que é claramente polinomial.
+\item Concluímos que $f$ é uma função de tempo polinomial.
+\end{itemize}
+\end{frame}
+
+\begin{frame} \frametitle{ $3SAT$ }
+Agora temos que mostrar que 
+
+$$\phi \in SAT \Leftrightarrow f(\phi) \in 3SAT$$
+\end{frame}
+
+\begin{frame} \frametitle{ $3SAT$ }
+Para o caso que $k \leq 3$:
+\begin{itemize}
+\item "se":  Note que quando $\phi$ é satisfeito então $f(\phi)$ também é.
+\item "somente se": Para o reverso note que se $f(\phi)$ é satisfeito, nós simplesmente restringimos as variáveis que aparecem em $\phi$ para obter uma atribuição que satisfaz $\phi$.
+\end{itemize}
+\end{frame}
+
+\begin{frame} \frametitle{ $3SAT$ }
+"Se ..." : Para o caso que $k > 3$, dado uma atribuição em alguma cláusula $c_i$ em $\phi$:
+\begin{enumerate}
+\item[(a)] Se $a_1$ ou $a_2$ é true, atribua todas as variáveis adicionais para false. Neste caso o primeiro literal em cada cláusula é true. 
+\item[(b)] Se $a_{k-1}$ ou $a_{k}$ é true, atribua todas as variáveis adicionais para true. Neste caso o terceiro literal em cada cláusula é true.
+\item[(c)] Caso contrário, se $a_l$ é true, atribua $z_j$ para true quando $1 \leq j \leq j-2$ e o valor false quando $l-1 \leq j \leq k-3$. Neste caso o terceiro literal em cada cláusula precede àquela que inclui $a_l$ é true, enquanto que o primeiro literal em cada cláusula sucessora àquela que inclui $a_l$ é true.
+\end{enumerate}
+
+Assim, a satisfabilidade de $\phi$ implica que a satisfabilidade de $f(\phi)$.
+
+\end{frame}
+
+\begin{frame} \frametitle{ $3SAT$ }
+
+"Somente se ...": Para o reverso, simplesmente restrinja a atribuição que satisfaz $f(\phi)$ para variáveis que ocorrem em $\phi$. $\boxempty$
+\end{frame}
+
+\begin{frame} \frametitle{ CLIQUE }
+\begin{center}
+\begin{tabular}{|p{9.0cm}|}
+\hline
+\textbf{Teorema 7.43:} 
+
+\hspace{1cm}CLIQUE $\in$ NP-Completo
+ \\\\
+\hline
+\end{tabular}
+\end{center}
+
+\textbf{Prova:} Provamos isto por uma redução polinomial $f$ de $3SAT$ para $CLIQUE$, tal que 
+
+$$\phi_k \in 3SAT \Leftrightarrow f(\phi_k) \in CLIQUE,$$ 
+
+onde $\phi_k$ é uma $3cnf$-fórmula com $k$ cláusulas e $f(\phi_k) = \langle G, k \rangle$.
+\end{frame}
+
+\begin{frame} \frametitle{ CLIQUE }
+Dado 
+
+$$\phi_k = (a_1 \vee b_1 \vee c_1) \wedge(a_2 \vee b_2 \vee c_2) \wedge \cdots \wedge (a_k \vee b_k \vee c_k)  $$
+
+A redução $f(\phi_k)$ gera a cadeia $\langle G, k \rangle$ onde $G$ é um grafo não-direcionado. Os nós são organizados em triplas que representam os literais das cláusulas. 
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=.35\textwidth]{fig06}
+\end{figure}
+\end{frame}
+
+\begin{frame} \frametitle{ CLIQUE }
+
+Construímos arestas conectando todos os nós exceto para
+\begin{itemize}
+\item nós que estão na mesma tripla, e
+\item nós que tem rótulos contraditórios, i.e., $x$ e $\overline{x}$
+\end{itemize}
+
+Exemplo de construção para
+
+$$\phi_3 = (x_1 \vee x_1 \vee x_2)\wedge(\overline{x_1} \vee \overline{x_2} \vee \overline{x_2})\wedge(\overline{x_1} \vee x_2 \vee x_2)$$
+
+produz o grafo
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=.4\textwidth]{fig07}
+\end{figure}
+\end{frame}
+
+\begin{frame} \frametitle{ CLIQUE }
+\begin{itemize}
+\item É fácil ver que esta é uma construção de tempo polinomial (seja $n$ o número de nós então o algoritmo executa em $O(n^2)$).
+\end{itemize}
+\end{frame}
+
+\begin{frame} \frametitle{ CLIQUE }
+Agora, temos que verificar a condição de redução
+
+$$\phi_k \in 3SAT \Leftrightarrow f(\phi_k) \in CLIQUE$$ 
+
+"Se ...": Suponha que $\phi_k$ tem uma atribuição que a satisfaz, o que significa que cada cláusula tem um literal que é true. Em cada tripla de G escolhemos um nó que corresponde a um literal true. O número de nós selecionados é $k$, uma em cada tripla. Todos os nós selecionados são conectados por uma aresta. Isto mostra que uma atribuição que satisfaz $\phi_k$ produz um $k$-clique
+
+\end{frame}
+
+\begin{frame} \frametitle{ CLIQUE }
+$$\phi_k \in 3SAT \Leftrightarrow f(\phi_k) \in CLIQUE$$ 
+
+"Somente se ...": Para o reverso, assuma que G tem um $k$-clique. Por construção, dois nós não podem estar conectados na mesma tripla. Portanto, cada $k$ tripla contém exatamente um dos nós do $k$-clique. Cada nó no $k$-clique denota uma atribuição para true para um literal em $\phi_k$. Isto é sempre verdadeiro pois literais opostos não estão conectados. $\boxempty$
+\end{frame}
+
+\begin{frame} \frametitle{ Cobertura de Vértices}
+Se G é um grafo não direcionado, uma cobertura de vértices de G é um subconjunto dos nós onde toda aresta de G toca um dos nós.
+
+\begin{center}
+\begin{tabular}{|p{9.0cm}|}
+\hline
+\textbf{Teorema 7.43:} 
+
+$COB-VERT =\{ \langle G, k \rangle | G$ é um grafo não-direcionado que tem uma cobertura de vértices de 
+$k$-nós $\}$ 
+\\
+\\
+\hspace{1cm} $COB-VERT \in$ NP-Completo
+ \\\\
+\hline
+\end{tabular}
+\end{center}
+\end{frame}
+
+\begin{frame} \frametitle{ }
+\begin{center}
+\begin{tabular}{|p{9.0cm}|}
+\hline
+\textbf{Teorema 7.43:} 
+
+$COB-VERT =\{ \langle G, k \rangle | G$ é um grafo não-direcionado que tem uma cobertura de vértices de 
+$k$-nós $\}$ 
+\\
+\\
+\hspace{1cm} $COB-VERT \in$ NP-Completo
+ \\\\
+\hline
+\end{tabular}
+\end{center}
+\textbf{Idéia da prova:}
+\begin{itemize}
+\item $COB-VERT$ pertence a NP
+\begin{itemize}
+\item Certificado: uma cobertura de tamanho $k$.
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame} \frametitle{ }
+\begin{center}
+\begin{tabular}{|p{9.0cm}|}
+\hline
+\textbf{Teorema 7.43:} 
+
+$COB-VERT =\{ \langle G, k \rangle | G$ é um grafo não-direcionado que tem uma cobertura de vértices de 
+$k$-nós $\}$ 
+\\
+\\
+\hspace{1cm} $COB-VERT \in$ NP-Completo
+ \\\\
+\hline
+\end{tabular}
+\end{center}
+\textbf{Idéia da prova:}
+\begin{itemize}
+\item $3SAT \leq_m COB-VERT$  
+\begin{itemize}
+\item Um grafo que simule 3fnc-fórmula $\phi$
+\item $\phi$ é satisfatível sse o grafo tiver uma cobertura de tamanho $k$
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+
+\begin{frame} \frametitle{ }
+\begin{center}
+\begin{tabular}{|p{9.0cm}|}
+\hline
+\textbf{Teorema 7.43:} 
+
+$COB-VERT =\{ \langle G, k \rangle | G$ é um grafo não-direcionado que tem uma cobertura de vértices de 
+$k$-nós $\}$ 
+\\
+\\
+\hspace{1cm} $COB-VERT \in$ NP-Completo
+ \\\\
+\hline
+\end{tabular}
+\end{center}
+\textbf{Idéia da prova:}
+\begin{itemize}
+\item $3SAT \leq_m COB-VERT$ , mapeamento:
+\begin{itemize}
+\item $\phi$: variáveis que assumem valor verdadeiro ou falso.
+\begin{itemize}
+\item G: dois nós de cada aresta (um deles ao menos tem que aparecer na cobertura - verdadeiro ou falso).
+\end{itemize}
+\item $\phi$: cada cláusula com 3 literais, pelo menos um verdadeiro
+\begin{itemize}
+\item G: grupos de 3 nós conectados por arestas, pelo menos 2 nós inclusos na cobertura.
+\end{itemize}
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+
+\begin{frame} \frametitle{ }
+\begin{center}
+\begin{tabular}{|p{9.0cm}|}
+\hline
+\textbf{Teorema 7.43:} 
+
+$COB-VERT =\{ \langle G, k \rangle | G$ é um grafo não-direcionado que tem uma cobertura de vértices de 
+$k$-nós $\}$ 
+\\
+\\
+\hspace{1cm} $COB-VERT \in$ NP-Completo
+ \\\\
+\hline
+\end{tabular}
+\end{center}
+Para cada variável x em $\phi$, produzimos uma aresta conectando dois nós. Rotulamos os dois nós por $x$ e $\overline{x}$.
+
+Fazer $x$ VERDADEIRO corresponde a selecionar o nó esquerdo para a cobertura de vértices, enquanto que FALSO corresponde ao nó direito.
+
+\end{frame}
+
+
+\begin{frame} \frametitle{ }
+\begin{center}
+\begin{tabular}{|p{9.0cm}|}
+\hline
+\textbf{Teorema 7.43:} 
+
+$COB-VERT =\{ \langle G, k \rangle | G$ é um grafo não-direcionado que tem uma cobertura de vértices de 
+$k$-nós $\}$ 
+\\
+\\
+\hspace{1cm} $COB-VERT \in$ NP-Completo
+ \\\\
+\hline
+\end{tabular}
+\end{center}
+Cada cláusula corresponde a uma tripla de nós conectados e que são rotulados com os três literais da cláusula.
+\end{frame}
+
+\end{document}
+

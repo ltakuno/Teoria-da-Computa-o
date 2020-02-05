@@ -1,0 +1,7 @@
+\beamer@endinputifotherversion {3.36pt}
+\select@language {brazil}
+\beamer@sectionintoc {1}{Introdu\c c\~ao}{3}{0}{1}
+\beamer@sectionintoc {2}{Decidibilidade}{5}{0}{2}
+\beamer@sectionintoc {3}{Linguagens regulares}{8}{0}{3}
+\beamer@sectionintoc {4}{Linguagens livres de contexto}{15}{0}{4}
+\beamer@sectionintoc {5}{Exerc\IeC {\'\i }cios}{21}{0}{5}

@@ -1,0 +1,6 @@
+\babel@toc {brazil}{}
+\beamer@sectionintoc {1}{Apresenta\c c\~ao}{3}{0}{1}
+\beamer@sectionintoc {2}{Recursos de tempo e espa\c co}{6}{0}{2}
+\beamer@sectionintoc {3}{Complexidade de tempo}{12}{0}{3}
+\beamer@sectionintoc {4}{Nota\c c\~ao assint\'otica}{15}{0}{4}
+\beamer@sectionintoc {5}{Relacionamento entre modelos de MT}{31}{0}{5}

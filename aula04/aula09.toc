@@ -1,0 +1,6 @@
+\beamer@endinputifotherversion {3.01pt}
+\select@language {brazil}
+\beamer@sectionintoc {1}{M\'aquina de Turing Universal}{3}{0}{1}
+\beamer@sectionintoc {2}{O problema da Parada}{8}{0}{2}
+\beamer@sectionintoc {3}{Linguagem Turing-irreconhec\IeC {\'\i }vel}{13}{0}{3}
+\beamer@sectionintoc {4}{M\'etodo da Diagonaliza\c c\~ao}{16}{0}{4}

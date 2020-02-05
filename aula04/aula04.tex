@@ -1,0 +1,501 @@
+\documentclass{beamer}
+\usepackage[brazil]{babel}
+\usepackage[latin1]{inputenc}
+\usepackage[all]{xy}
+\usepackage{stmaryrd}
+\usepackage{verbatim}
+\usepackage{graphicx}
+\usepackage{indentfirst}
+\usepackage{float}
+\usepackage{psfrag}
+
+\usepackage{stmaryrd}
+
+\mode<presentation>{
+  
+  \usepackage{beamerthemesplit} 
+  %\usetheme[secheader]{Madrid}
+  %\usetheme{Antibes}
+  \usetheme{Warsaw}
+  %\usecolortheme{seagull}
+  %\usecolortheme{lily}
+  \usepackage{pgf,pgfarrows,pgfnodes,pgfautomata,pgfheaps,pgfshade}
+  \beamertemplatetransparentcovereddynamic
+  \beamertemplateballitem
+  \beamertemplatefootpagenumber
+  \setbeamertemplate{navigation symbols}{} 
+  %\useoutertheme{infolines} 
+  %\setbeamercolor{title}{fg=red!80!black}
+  %\setbeamercolor{normal text}{fg=red!80}
+}
+%
+\def\red{\color[rgb]{0.7,0,0}}
+\def\green{\color[rgb]{0,.8,0}}
+\def\darkgreen{\color[rgb]{0.1,0.4,0.0}}
+\let\dgreen\darkgreen
+\def\blue{\color[rgb]{0,0,.8}}
+\def\yellow{\color[rgb]{1,1,0}}
+\def\black{\color[rgb]{0,0,0}}
+
+\def\pink{\color[rgb]{1,0,1}}
+\def\brown{\color[rgb]{.5,.1,.3}}
+\def\lilaz{\color[rgb]{.5,0,.5}}
+\def\hmmm{\color[rgb]{.3,.1,.5}}
+\def\magenta{\color[rgb]{.6,.05,.05}}
+
+\title{Teoria da Computação \\ {Indecidibilidade}}
+\author{{Leonardo~Takuno}\\
+\texttt{\{leonardo.takuno@gmail.com\}}}
+\date{{\dgreen Centro Universitário Senac}}
+
+
+\begin{document}
+%\maketitle				% OPTIONAL
+
+\pgfdeclareimage[height=1.0cm]{logo}{logo.eps}
+\logo{\pgfuseimage{logo}}
+
+\frame{\titlepage}
+
+\frame{
+\frametitle{Sumário}
+\tableofcontents
+}
+
+\AtBeginSection[]
+{
+ \begin{frame}
+  \frametitle{Sumário}
+  \tableofcontents[currentsection]
+ \end{frame}
+}
+
+\section{Máquina de Turing Universal}
+
+\begin{frame} \frametitle{ Máquina de Turing Universal }
+
+Sabemos que as linguagens:
+$$A_{AFD} = \{ \langle B, w \rangle | B \textrm{ é um AFD que aceita }w\}$$
+$$A_{GLC} = \{ \langle G, w \rangle | G \textrm{ é uma GLC que gera }w\}$$
+são Turing-decidíveis.
+
+E sobre a linguagem 
+$$A_{MT} = \{ \langle M, w \rangle | M \textrm{ é uma MT que aceita }w\}. $$
+
+Existe uma máquina de Turing capaz de simular outras Máquinas de Turing ?
+\end{frame}
+
+\begin{frame} \frametitle{ Probema de aceitação para Máquinas de Turing }
+\begin{center}
+\begin{tabular}{|p{9.0cm}|}
+\hline
+A linguagem
+ $$A_{MT} = \{ \langle M, w \rangle | M \textrm{ é uma MT que aceita }w\}$$ 
+ é chamada de \textbf{problema de aceitação para MT} ou \textbf{problema da parada} (\textit{the halting problem}).
+ \\
+\hline
+\end{tabular}
+\end{center}
+
+\end{frame}
+
+\begin{frame} \frametitle{ Máquina de Turing Universal } 
+\begin{center}
+\begin{tabular}{|p{9.0cm}|}
+\hline
+\textbf{Teorema: }A linguagem $A_{MT}$ é Turing-reconhecível. \\
+\hline
+\end{tabular}
+\end{center}
+
+Dada a entrada $\langle M, w \rangle$, onde M é uma MT e w é uma cadeia, podemos simular M sobre w?
+
+Podemos simular via máquina de Turing Universal U.
+
+
+
+U = ``Sobre a entrada $\langle M, w \rangle$, onde M é uma MT e w é uma cadeia:
+\begin{enumerate}
+	\item Simule M sobre a entrada $w$.
+	\item Se M em algum momento entra no seu estado de aceitação, \textit{aceite}; se M em algum momento entra em seu estado de rejeição, \textit{rejeite}. ''
+\end{enumerate}
+\end{frame}
+\begin{frame} \frametitle{ Problema da Parada } 
+A existência da máquina de Turing Universal U mostra que 
+$$A_{MT} = \{ \langle M, w \rangle | M \textrm{ é uma MT que aceita }w\}. $$
+é Turing-reconhecível, mas também podemos decidí-lo? 
+
+\begin{itemize}
+	\item O problema ocorre nos casos em que M não pára sobre um determinado w. 
+	\item Veremos que este é um insuperável problema: em geral, não se pode decidir se uma MT irá parar sobre $w$ ou não, assim $A_{MT}$ é indecidível.
+\end{itemize}
+
+\end{frame}
+
+\section{O problema da Parada}
+\begin{frame} \frametitle{Problema da Parada}
+\begin{center}
+\begin{tabular}{|p{9.0cm}|}
+\hline
+\textbf{Teorema 4.11: }A linguagem
+$$A_{MT} = \{ \langle M, w \rangle | M \textrm{ é uma MT que aceita }w\} $$
+é indecidível. \\
+\hline
+\end{tabular}
+\end{center}
+\textbf{Prova:} Por contradição. Assuma que exista um decisor $H$ para a linguagem $A_{TM}$. Então,
+$$H(\langle M,w \rangle)=\left\{\begin{array}{rl}
+\mbox{aceite}&\mbox{se \emph{M} aceita w}\\
+\mbox{rejeite}&\mbox{se não \emph{M} aceita w}
+\end{array}\right.
+$$
+
+\end{frame}
+
+\begin{frame} \frametitle{Problema da Parada}
+Construímos uma nova MT $D$ tal que 
+
+D = ``Sobre a entrada $\langle Q \rangle$ onde Q é uma MT:
+\begin{enumerate}
+	\item  Execute H sobre a entrada $\langle Q, \langle Q \rangle \rangle$.
+ 	\item  Faça o oposto da saída de H; se H aceita, rejeite e se H rejeita, aceite.''
+\end{enumerate}
+
+Agora,
+$$D(\langle M \rangle)=\left\{\begin{array}{rl}
+\mbox{aceite}&\mbox{se \emph{M} não aceita } \langle M \rangle\\
+\mbox{rejeite}&\mbox{se \emph{M} aceita } \langle M \rangle
+\end{array}\right.
+$$
+
+Mas ...
+\end{frame}
+
+\begin{frame} \frametitle{Problema da Parada}
+O que acontece quando rodamos $D$ com sua própria descrição $\langle D \rangle$ como entrada ? Nesse caso, obtemos
+
+$$D(\langle D \rangle)=\left\{\begin{array}{rl}
+\mbox{aceite}&\mbox{se \emph{D} não aceita } \langle D \rangle\\
+\mbox{rejeite}&\mbox{se \emph{D} aceita } \langle D \rangle
+\end{array}\right.
+$$
+\begin{itemize}
+	\item Independentemente do que $D$ faz, ela é forçada a fazer o oposto.
+	\item Isto é uma contradição. Portanto, nem H nem D pode existir e $A_{MT}$ é indecidível. 
+\end{itemize}
+\end{frame}
+
+\begin{frame} \frametitle{Linguagem Turing-irreconhecível}
+A indecidibilidade de $A_{MT}$ tem profundas ramificações e implica na existência de linguagens que não são computáveis, isto é, linguagens que não são Turing-reconhecíveis. Tal linguagem é o complemento de $A_{MT}$.
+
+\begin{center}
+\begin{tabular}{|p{9.0cm}|}
+\hline
+\textbf{Teorema: }Uma linguagem é decidível sse ela é Turing-reconhecível e co-Turing-reconhecível \\
+\hline
+\end{tabular}
+\end{center}
+
+\begin{itemize}
+	\item Sabemos que $A_{MT}$ é Turing-reconhecível pois utilizamos uma máquina universal para reconhecê-la.
+	\item Sabemos que $A_{MT}$ é indecidível, pelo problema da Parada.
+	\item Logo, $A_{MT}$ não é co-Turing-reconhecível.
+\end{itemize}
+
+
+\end{frame}
+\section{Linguagem Turing-irreconhecível}
+
+\begin{frame} \frametitle{Linguagem Turing-irreconhecível}
+\begin{center}
+\begin{tabular}{|p{9.0cm}|}
+\hline
+\textbf{Teorema: }A linguagem $\overline{A_{MT}}$ não é Turing-reconhecível. \\
+\hline
+\end{tabular}
+\end{center}
+
+\textbf{Prova:} Por contradição. Observe que $A_{MT}$ é indecidível. Além disso, observe que 
+$A_{MT}$ é Turing-reconhecível. Agora, assuma que that $\overline{A_{MT}}$ é também Turing-reconhecível.
+Verifique que a string $w$, ou é um elemento de $A_{MT}$, ou um elemento de $\overline{A_{MT}}$ podemos
+contruir o seguinte decisor para $A_{MT}$. 
+
+\end{frame}
+\begin{frame} \frametitle{Linguagem Turing-irreconhecível}
+
+Seja $M1$ e $M2$ reconhecedores para $A_{MT}$ e $\overline{A_{MT}}$,
+respectivamente:
+
+M = ``Sobre a entrada $w$, onde $w$ é uma string:
+\begin{enumerate}
+	\item Execute $M1$ e $M2$ em paralelo sobre $w$.
+	\item Se $M1$ aceita, aceite; se $M2$ aceita, rejeite."
+\end{enumerate}
+
+Note que esta máquina é um decisor pois irá parar sobre toda entrada $w$. Note também, que 
+este decisor contradiz nosso teorema que $A_{MT}$ é indecidível. Portanto, nossa hipótese
+que $\overline{A_{MT}}$ é Turing-reconhecível deve estar errada.
+Isto mostra que $\overline{A_{MT}}$ não é Turing-reconhecível.$\boxempty$
+\end{frame}
+
+
+\section{Método da Diagonalização}
+
+\begin{frame} \frametitle{Método da Diagonalização}
+\begin{itemize}
+	\item Acabamos de ver uma prova não construtiva de que existem linguagens que não são Turing-reconhecíveis.
+	\item Vamos ver uma prova construtiva que mostra que algumas linguagens não são computáveis por algoritmos.
+	\item Esta prova mostra que o conjunto de todas as máquinas de Turing é contável ao passo que o
+conjunto de todas as linguagens é incontável. 
+	\item Portanto, existem algumas linguagem que não são reconhecíveis por máquina de Turing. 
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame} \frametitle{Método da Diagonalização}
+\begin{itemize}
+	\item Georg Cantor (1873).
+	\item Medida do tamanho de conjuntos infinitos.
+	\item Se tivermos dois conjuntos infinitos, como podemos dizer se um é maior que o outro ou se eles têm o mesmo tamanho?
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame} \frametitle{Método da Diagonalização}
+\begin{itemize}	
+	
+	\item Considere o conjunto $f : A \rightarrow B$
+
+\begin{itemize}
+	\item $f$ é \textbf{um-para-um} se $f(a) \neq f(b)$ sempre que $a \neq b$.
+	\item $f$ é \textbf{sobrejetora} se para todo $b \in B$ existe um $a \in A$ tal que $f(a) = b$.
+	\item $f$ é \textbf{correspondência} se $f$ é tanto um-para-um quanto sobrejetora.
+	\item Digamos que A e B são de \textbf{mesmo tamanho} se existe uma correspondência $f : A \rightarrow B$.
+\end{itemize}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame} \frametitle{Método da Diagonalização}
+Exemplo: $f : \mathcal{N} \rightarrow \mathcal{E}$,  onde $\mathcal{N}$ é o conjunto dos números naturais e $\mathcal{E}$ é o conjunto dos naturais pares.
+
+\begin{itemize}
+	\item $f(n) = 2n$ é uma correspondência.
+\end{itemize}
+
+\begin{center}
+\begin{tabular}{c|c}
+$n$ & $f(n)$ \\
+\hline 
+$1$ & $2$ \\
+$2$ & $4$ \\
+$3$ & $6$ \\
+$\vdots$ &  $\vdots$ \\
+\end{tabular}
+\end{center}
+
+Portanto, declaramos que estes dois conjuntos são do mesmo tamanho.
+\begin{center}
+\begin{tabular}{|p{9.0cm}|}
+\hline
+\textbf{Definição: }Um conjunto é \textbf{contável} se é finito ou tem o mesmo tamanho que $\mathcal{N}$ \\
+\hline
+\end{tabular}
+\end{center}
+
+\end{frame}
+
+\begin{frame} \frametitle{Método da Diagonalização}
+
+\begin{center}
+\begin{tabular}{|p{9.0cm}|}
+\hline
+\textbf{Teorema: } Seja $Q = \{ \frac{m}{n} | m,n \in \mathcal{N}\}$ o conjunto dos números racionais positivos, $Q$ é contável. \\
+\hline
+\end{tabular}
+\end{center}
+
+\textbf{Idéia da prova:}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=.6\textwidth]{fig1}
+\end{figure}
+
+\end{frame}
+
+
+\begin{frame} \frametitle{Método da Diagonalização}
+\begin{center}
+\begin{tabular}{|p{9.0cm}|}
+\hline
+\textbf{Teorema: } Seja $\mathcal{R}$ o conjunto dos números reais, $\mathcal{R}$ é incontável. \\
+\hline
+\end{tabular}
+\end{center}
+\textbf{Prova:} Prova por contradição. Assuma que exista uma correspondência $f$ entre $\mathcal{N}$ e $\mathcal{R}$. Agora obtemos um $x \in \mathcal{R}$ que não é pareada com qualquer elemento de $\mathcal{N}$. Escolha o \textit{i-ésimo} dígito fracionário de $x$ diferente do dígito da \textit{i-ésima} fração.
+
+\begin{center}
+\begin{tabular}{c|c}
+$n$ & $f(n)$ \\
+\hline 
+$1$ & $3,\underline{1}4159...$ \\
+$2$ & $55,5\underline{5}555...$ \\
+$3$ & $0,12\underline{3}45...$ \\
+$4$ & $0,500\underline{0}00...$ \\
+$\vdots$ &  $\vdots$ \\
+\end{tabular}
+\end{center}
+
+Ex: $x = 0,4641...$. Então, $x \neq f(n)$ para todo $n$. Logo $\mathcal{R}$ é incontável.$\boxempty$
+
+\end{frame}
+
+
+\begin{frame} \frametitle{Uma prova construtiva}
+\begin{center}
+\begin{tabular}{|p{9.0cm}|}
+\hline
+\textbf{Teorema: }O conjunto de todas as máquinas de Turing é contável. \\
+\hline
+\end{tabular}
+\end{center}
+\textbf{Prova:} Procedemos por construir uma correspondência entre o número natural e
+o conjunto de todas as máquinas de Turing. Observe que o conjunto de todas as strings
+sobre algum alfabeto é contável, isto é, toda string de um tamanho particular
+tem um número finito de permutações de símbolos de alfabeto. Isto é, podemos construir uma correspondência
+de números naturais para strings. 
+
+Além disso, note que podemos codificar todos os alfabetos possíveis
+usando o alfabeto $\Sigma$. Isto implica que qualquer máquina de Turing M pode ser
+codificada com uma string $\langle M \rangle$. Seja $\langle M \rangle^*$ o conjunto
+de todas as descrições de máquinas de Turing válidas. Observe que $\langle M \rangle^* \subseteq  \Sigma^*$.
+Sabemos que $\Sigma^*$ é contável, logo, $\langle M \rangle^*$ é contável. $\boxempty$
+
+\end{frame}
+
+\begin{frame} \frametitle{Uma prova construtiva}
+\begin{center}
+\begin{tabular}{|p{9.0cm}|}
+\hline
+\textbf{Teorema: }O conjunto de todas as seqüências binárias infinita é incontável. \\
+\hline
+\end{tabular}
+\end{center}
+\textbf{Prova:} Prova por contradição. Assuma que podemos construir uma correspondência $f : N \rightarrow \mathcal{B}$, 
+onde $\mathcal{N}$ são os números naturais e $\mathcal{B}$ é o conjunto de todas as seqüências binárias infinitas. Então,
+\begin{center}
+\begin{tabular}{c|c}
+$n$ & $f(n)$ \\
+\hline 
+$1$ & $0100111$  ... \\
+$2$ & $11111000$ ... \\
+$3$ & $1011001$ ... \\
+$\vdots$ &  $\vdots$ \\
+$n$ & $0010$ ... $0_n$ ... \\
+$\vdots$ &  $\vdots$ \\
+\end{tabular}
+\end{center}
+
+\end{frame}
+
+\begin{frame} \frametitle{Uma prova construtiva}
+Então,
+
+\begin{center}
+\begin{tabular}{c|c}
+$n$ & $f(n)$ \\
+\hline 
+$1$ & $0100111$  ... \\
+$2$ & $11111000$ ... \\
+$3$ & $1011001$ ... \\
+$\vdots$ &  $\vdots$ \\
+$n$ & $0010$ ... $0_n$ ... \\
+$\vdots$ &  $\vdots$ \\
+\end{tabular}
+\end{center}
+
+Observe que podemos construir uma seqüência binária que difere de todas as seqüências enumeradas pelo menos em 1 bit,
+$100 ... 1 ...$.
+Isto é, para qualquer valor de $k$ temos que construir uma seqüência que difere no valor de $f(k)$ no \textit{k-ésimo} bit. Portanto, existem elementos em $\mathcal{B}$ que não são imagens de $f$. Isto significa nossa hipótese de que $f$ é uma correspondência incorreta.$\boxempty$
+
+\end{frame}
+
+\begin{frame} \frametitle{Uma prova construtiva}
+\begin{center}
+\begin{tabular}{|p{9.7cm}|}
+\hline
+\textbf{Teorema: }O conjunto de todas as linguagens $\mathcal{L}$ sobre o alfabeto $\Sigma_{0,1}$ é incontável. \\
+\hline
+\end{tabular}
+\end{center}
+
+\textbf{Prova:} Mostramos uma correspondência $f :\mathcal{L} \rightarrow \mathcal{B}$. Para cada linguagem $A \in \mathcal{L}$ podemos construir
+um único elemento em $\mathcal{B}$. Seja $\Sigma^* = \{s_1, s_2, s_3, . . .\}$. O \textit{i-ésimo} bit da \textbf{seqüência característica} de $A$ é 1 se $s_i \in A$ e 0 se $s_i \notin A$.
+\end{frame}
+
+\begin{frame} \frametitle{Uma prova construtiva}
+\begin{center}
+\begin{tabular}{|p{9.7cm}|}
+\hline
+\textbf{Teorema: }O conjunto de todas as linguagens $\mathcal{L}$ sobre o alfabeto $\Sigma_{0,1}$ é incontável. \\
+\hline
+\end{tabular}
+\end{center}
+Exemplo: se $A$ fosse a linguagem de todas as cadeias começando com 0 sobre o alfabeto $\{0,1\}$, sua seqüência característica $\mathcal{X_A}$ seria
+
+\begin{center}
+\begin{tabular}{ccccccccccc}
+$\Sigma^*$      & = $\{$ & $\varepsilon$, & $1$,  & $00$, & $01$, & $10$, & $11$, & $000$, & $001$, & ...$\}$ \\
+$\mathcal{A}$   & = $\{$ &              , &    ,  & $00$, & $01$, &     , &     , & $000$, & $001$, & ...$\}$ \\
+$\mathcal{X_A}$ & = $\{$ &      $0$     , & $0$,  &  $1$, &  $1$, &  $0$, &  $0$, &   $1$, &  $1$ , & ...$\}$ \\
+\end{tabular}
+\end{center}
+
+A função $f: \mathcal{L} \rightarrow \mathcal{B}$, onde $f(A)$ é a seqüência característica de $A$, é um-para-um e sobrejetora e, portanto, uma correspondência. Conseqüentemente, como $\mathcal{B}$ é incontável, $\mathcal{L}$ também é incontável.$\boxempty$
+
+\end{frame}
+
+\begin{frame} \frametitle{Uma prova construtiva}
+\begin{center}
+\begin{tabular}{|p{9.7cm}|}
+\hline
+\textbf{Teorema: }Algumas linguagens não são Turing-reconhecíveis. \\
+\hline
+\end{tabular}
+\end{center}
+
+\textbf{Prova:} Observe que o conjunto de Máquinas de Turing é contável e da prova anterior segue que o conjunto de todas as linguagens é incontável. Assim, não conseguimos construir uma correspondência entre o conjunto de todas as linguagens e o conjunto de máquinas de Turing.
+
+Portanto, existem algumas linguagens que não são reconhecidas por Máquina de Turing. $\boxempty$
+\end{frame}
+
+
+\begin{frame} \frametitle{Exercícios}
+1) Mostre que o conjunto dos números naturais pares $\{2,4,6, \cdots\}$ e o conjunto dos números naturais ímpares $\{1,3,5,\cdots\}$ têm o mesmo tamanho.
+\end{frame}
+
+\begin{frame} \frametitle{Exercícios (Solução)}
+Basta realizar o seguinte emparelhamento (função bijetora) entre os dois conjuntos:
+
+\begin{table}[h]
+\begin{tabular}{|c|c|} \hline
+ Pares &    Ímpares \\ \hline
+ 0 & 1 \\
+ 2 & 3 \\
+ 4 & 5 \\
+ 6 & 7 \\
+ 8 & 9 \\
+ 10 & 11 \\
+ $\cdots$ & $\cdots$ \\ \hline
+\end{tabular}
+\end{table}
+ A função que mapeia os pares nos ímpares é dada por $f: pares \rightarrow impares$ $f(x) = x+1$ que, claramente, é uma função bijetora (gráfico é uma reta)
+\end{frame}
+
+\end{document}
+
+
+

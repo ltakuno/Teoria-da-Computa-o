@@ -1,0 +1,704 @@
+\documentclass{beamer}
+\usepackage[brazil]{babel}
+\usepackage[latin1]{inputenc}
+\usepackage[all]{xy}
+\usepackage{stmaryrd}
+\usepackage{verbatim}
+\usepackage{graphicx}
+\usepackage{indentfirst}
+\usepackage{float}
+\usepackage{psfrag}
+
+\usepackage{stmaryrd}
+
+\mode<presentation>{
+  
+  \usepackage{beamerthemesplit} 
+  %\usetheme[secheader]{Madrid}
+  %\usetheme{Antibes}
+  \usetheme{Warsaw}
+  %\usecolortheme{seagull}
+  %\usecolortheme{lily}
+  \usepackage{pgf,pgfarrows,pgfnodes,pgfautomata,pgfheaps,pgfshade}
+  \beamertemplatetransparentcovereddynamic
+  \beamertemplateballitem
+  \beamertemplatefootpagenumber
+  \setbeamertemplate{navigation symbols}{} 
+  %\useoutertheme{infolines} 
+  %\setbeamercolor{title}{fg=red!80!black}
+  %\setbeamercolor{normal text}{fg=red!80}
+}
+%
+\def\red{\color[rgb]{0.7,0,0}}
+\def\green{\color[rgb]{0,.8,0}}
+\def\darkgreen{\color[rgb]{0.1,0.4,0.0}}
+\let\dgreen\darkgreen
+\def\blue{\color[rgb]{0,0,.8}}
+\def\yellow{\color[rgb]{1,1,0}}
+\def\black{\color[rgb]{0,0,0}}
+
+\def\pink{\color[rgb]{1,0,1}}
+\def\brown{\color[rgb]{.5,.1,.3}}
+\def\lilaz{\color[rgb]{.5,0,.5}}
+\def\hmmm{\color[rgb]{.3,.1,.5}}
+\def\magenta{\color[rgb]{.6,.05,.05}}
+
+\title{Teoria da Computação \\ {Complexidade de Tempo\\ parte 2}}
+\author{{Leonardo~Takuno}\\
+\texttt{\{leonardo.takuno@gmail.com\}}}
+\date{{\dgreen Centro Universitário Senac}}
+
+
+\begin{document}
+%\maketitle				% OPTIONAL
+
+\pgfdeclareimage[height=1.0cm]{logo}{logo.eps}
+\logo{\pgfuseimage{logo}}
+
+\frame{\titlepage}
+
+\frame{
+\frametitle{Sumário}
+\tableofcontents
+}
+
+\AtBeginSection[]
+{
+ \begin{frame}
+  \frametitle{Sumário}
+  \tableofcontents[currentsection]
+ \end{frame}
+}
+
+\section{Complexidade de Tempo}
+
+\begin{frame} \frametitle{ Teoria da complexidade }
+\begin{center}
+\begin{tabular}{|p{10.0cm}|}
+\hline
+\textbf{Definição}: Seja $t: N \rightarrow R^+$ uma função. Define-se \textit{\textbf{classe de complexidade de tempo}}, $TIME(t(n))$, a coleção de todas as linguagens que são decidíveis por uma máquina de Turing de tempo $O(t(n))$, formalmente
+
+$$ TIME(t(n)) = \{ L | L \textrm{ é  decidida por MT de tempo } O(t(n)) \}$$ 
+\\
+\hline
+\end{tabular}
+\end{center}
+\end{frame}
+
+\begin{frame} \frametitle{ Teoria da complexidade }
+ \textbf{Exemplo:} Considere $A = \{0^k1^k|k \geq 0\}$. 
+ 
+ Mostramos que $A \in TIME(n^2)$ e também que $A \in TIME(n)$.
+
+\vspace{1cm} Observação: Note que a mesma linguagem pode ser um membro de muitas classes de complexidades de tempo dependendo de
+como estamos planejando o nosso algoritmo.
+\end{frame}
+
+\begin{frame} \frametitle{ Teoria da complexidade }
+ $A = \{0^k 1^k | k \geq 0\}$
+
+\begin{itemize}
+	\item Note que a diferença entre os algoritmos para decidir $A$ são diferenças polinomiais, que é, $O(n^2)$ versus $O(n)$.
+	\item Dizemos que os modelos  são \textbf{polinomialmente equivalentes}: um modelo pode simular o outro com um aumento polinomial.
+\end{itemize}
+\end{frame}
+\section{Classe P}
+
+\begin{frame} \frametitle{ Classe P }
+
+\begin{center}
+\begin{tabular}{|p{10.0cm}|}
+\hline
+\textbf{Definição}: P é a classe de linguagens que são decidíveis em tempo polinomial em uma máquina de Turing Determinística,
+
+      $$P = \bigcup_{k}TIME(n^k) \textrm{, para } k \geq 0$$
+\\
+\hline
+\end{tabular}
+\end{center}
+\end{frame}
+
+\begin{frame} \frametitle{ Classe P }
+A classe P é interessante porque:
+\begin{itemize}
+	\item P é invariante para todo modelo computacional que é equivalente à máquina de Turing de uma única fita.
+	\item P, a grosso modo, corresponde a classe de problemas que são realisticamente solúveis por computador.
+\end{itemize}
+\end{frame}
+
+\begin{frame} \frametitle{ Classe P }
+\textbf{Exemplo:} Note que esta definição de nossa linguagem $A = \{0^k1^k | k \geq 0 \}$ é claramente um membro de P
+sem levar em consideração de qual algoritmo exato usamos para decidí-lo.
+\end{frame}
+
+
+\begin{frame} \frametitle{ $CAM \in P$ }
+\begin{center}
+\begin{tabular}{|p{10.5cm}|}
+\hline
+\textbf{Teorema}: $CAM \in P$, onde 
+
+$CAM = \{
+\langle G, s, t \rangle | $   $G$ é um grafo dirigido que tem um  caminho direcionado de s para t $\}.$
+\\
+\hline
+\end{tabular}
+\end{center}
+\textbf{Idéia da Prova:} 
+Uma busca por força bruta para o caminho não funciona, pois tal algoritmo executará em tempo exponencial no número de nós de G. Entretanto, podemos ser mais espertos e implementar uma busca incremental. Então, provamos esse teorema apresentando um algoritmo em tempo polinomial que decide CAM.
+\end{frame}
+
+\begin{frame} \frametitle{ $CAM \in P$ }
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=.8\textwidth]{fig01}
+\end{figure}
+
+Existe um caminho de s a t ?
+\end{frame}
+
+\begin{frame} \frametitle{ $CAM \in P$ }
+\textbf{Prova:} 
+M = ``Sobre a entrada $\langle G, s, t\rangle$:
+\begin{enumerate}
+	\item Coloque uma marca no nó s.
+	\item Repita as seguintes instruções até que nenhum nó adicional seja marcado:
+	\item \hspace{0.6cm}Faça uma varredura em todas as arestas de G. Se existe 
+	
+	\hspace{0.6cm}uma aresta (a, b) do nó a marcado para um nó b não 
+	
+	\hspace{0.6cm}marcado, então marque o nó b.
+	\item Se t é marcado, aceite; caso contrário, rejeite."
+\end{enumerate}
+\end{frame}
+
+\begin{frame} \frametitle{ $CAM \in P$ }
+\textbf{Análise.} A estrutura de repetição no passo 3 leva $O(|E|)$ (onde $|E|$ é o número de arestas) para executar. O loop é executado $O(|V|)$ vezes (onde $|V|$ é o número de vértices). Tempo total é igual à $O(|E| \times |V|)$. Este tempo é polinomial ($O(n^2)$) no tamanho da entrada. Assim $CAM \in P$. $\boxempty$
+\end{frame}
+
+\begin{frame} \frametitle{ $PRIM-ES \in P$ }
+\begin{center}
+\begin{tabular}{|p{9.5cm}|}
+\hline
+\textbf{Teorema}: $PRIM-ES \in P$, onde 
+
+$PRIM-ES = \{\langle x,y \rangle | x \textrm{ e } y  \textrm{ são primos entre si}\}.$
+      
+\\
+\hline
+\end{tabular}
+\end{center}
+Dois números são primos entre si se 1 é o maior inteiro que divide ambos.
+
+Ex:
+
+\begin{itemize}
+	\item 10 e 21 são primos entre si.
+	\item 10 e 22 não são primos entre si.
+\end{itemize}
+\end{frame}
+
+\begin{frame} \frametitle{ $PRIM-ES \in P$ }
+\begin{center}
+\begin{tabular}{|p{9.5cm}|}
+\hline
+\textbf{Teorema}: $PRIM-ES \in P$, onde 
+
+$PRIM-ES = \{\langle x,y \rangle | x \textrm{ e } y  \textrm{ são primos entre si}\}.$
+      
+\\
+\hline
+\end{tabular}
+\end{center}
+\textbf{Idéia da prova:} 
+
+\begin{itemize}
+	\item Buscar todos os possíveis divisores de ambos os números e aceita se nenhum deles é maior que 1. (Força Bruta - tempo de execução exponencial).
+	\item Algoritmo de Euclides para computar o máximo divisor comum. 
+\end{itemize}
+\end{frame}
+
+\begin{frame} \frametitle{ $PRIM-ES \in P$ }
+\begin{center}
+\begin{tabular}{|p{9.5cm}|}
+\hline
+$PRIM-ES = \{\langle x,y \rangle | x \textrm{ e } y  \textrm{ são primos entre si}\}.$
+\\
+\hline
+\end{tabular}
+\end{center}
+
+\textbf{Prova:} O algoritmo euclidiano $E$ é como segue:
+
+$E$ = ``Sobre a entrada $\langle x,y \rangle$, onde $x$ e $y$ são números naturais:
+
+\begin{enumerate}
+	\item Repita até que $y = 0$.
+	\item \hspace{1cm}Atribua $x \leftarrow x \mod y$.
+	\item \hspace{1cm} $troca(x,y)$
+	\item Dê como saída $x$.''
+\end{enumerate}
+
+O algoritmo $R$ resolve $PRIM-ES$, usando $E$ como uma sub-rotina.
+
+$R$ = ``Sobre a entrada $\langle x,y \rangle$, onde $x$ e $y$ são números naturais:
+
+\begin{enumerate}
+	\item Rode $E$ sobre $\langle x,y \rangle$.
+	\item Se o resultado for 1, aceite. Caso contrário, rejeite.''
+\end{enumerate}
+
+\end{frame}
+\section{Classe NP}
+\begin{frame} \frametitle{ Classe NP }
+\begin{itemize}
+	\item Em teoria de complexidade computacional, \textbf{NP} é uma das mais fundamentais classe de complexidades. 
+	\item A abreviação NP se refere a \textbf{tempo polinomial não- determinístico} (\textit{non-deterministic polynomial time}) que denota o conjunto de problemas que são decidíveis em tempo polinomial por uma máquina de Turing não-determinística.
+\end{itemize}
+
+\end{frame}
+
+\begin{frame} \frametitle{ Classe NP }
+\begin{center}
+\begin{tabular}{|p{10cm}|}
+\hline
+\textbf{Definição}: Definimos a classe de complexidade de tempo $NTIME(t(n))$ como:
+
+$NTIME(t(n))$ = $\{$ L $|$ L é uma linguagem decidida por uma máquina de Turing não-determinística de tempo $O(t(n))\}$
+\\
+\hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{|p{10cm}|}
+\hline
+\textbf{Definição}: 
+
+      $$NP = \bigcup_{k}NTIME(n^k) \textrm{, para } k \geq 0$$
+\\
+\hline
+\end{tabular}
+\end{center}
+\end{frame}
+
+\begin{frame} \frametitle{Caminho Hamiltoniano}
+\begin{itemize}
+\item Um caminho hamiltoniano em um grafo é um caminho direcionado de s para t que passa por cada nó exatamente uma vez. 
+
+\item Nenhum algoritmo determinístico de tempo polinomial é conhecido para decidir esta linguagem.
+\end{itemize}
+\end{frame}
+
+\begin{frame} \frametitle{Caminho Hamiltoniano}
+\begin{center}
+\begin{tabular}{|p{10cm}|}
+\hline
+\textbf{Teorema}: 
+\vspace{0.3cm}
+
+$CAMHAM = \{ \langle G,s,t \rangle | $ $G$ é um grafo direcionado com um caminho hamiltoniano de s para t $ \} \in NP$
+\\
+\hline
+\end{tabular}
+\end{center}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=.7\textwidth]{fig02}
+\end{figure}
+\end{frame}
+
+\begin{frame} \frametitle{Caminho Hamiltoniano}
+\begin{center}
+\begin{tabular}{|p{10cm}|}
+\hline
+\textbf{Teorema:} $CAMHAM \in NP$
+\\
+\hline
+\end{tabular}
+\end{center}
+
+
+\textbf{Prova:} Construímos uma máquina de Turing não-determinística que decida $CAMHAM$ em tempo polinomial.
+
+N1 = ``Sobre a entrada $\langle G, s, t \rangle$:
+\begin{enumerate}
+	\item  Não deterministicamente gere uma permutação de m números $p_1$, ..., $p_m$ tal que 
+1 $\leq$ $p_i$ $\leq$ $m$ onde $m$ é o número de nós do grafo G.
+  \item Verifique se $p_1$ = $s$ e $p_m$ = $t$. Se o teste falhar,  \textit{rejeite}.
+  \item Para cada i entre 1 e m - 1, verifique se $(p_i, p_{i+1})$ é uma aresta de G. Se alguma não for, \textit{rejeite}. 
+  Caso contrário, a lista gerada de números representa o caminho Hamiltoniano, então \textit{aceite}.''
+\end{enumerate}
+Análise: É fácil ver que todos os estágios executam em tempo polinomial. $\boxempty$
+\end{frame}
+
+
+\begin{frame} \frametitle{ Classe NP}
+ Podemos definir a classe NP de maneira alternativa usando verificadores determinísticos de tempo polinomial.
+ 
+ \begin{center}
+\begin{tabular}{|p{10cm}|}
+\hline
+\textbf{Definição}: Um \textbf{verificador} para uma linguagem A é uma MT determinística V, onde 
+
+\vspace{0.5cm}\hspace{0.7cm}$A = \{ w| $ $V$ aceita $\langle w,c \rangle$ para alguma cadeia $c\}$
+\\\\
+\hline
+\end{tabular}
+\end{center}
+Aqui a string $c$ é chamada \textbf{certificado}, ou \textbf{prova}. Medimos o tempo de um verificador em termos do comprimento de $w$. 
+\end{frame}
+
+
+\begin{frame} \frametitle{ Classe NP}
+
+Uma linguagem A é \textbf{polinomialmente verificável} se ela tem um verificador de tempo polinomial.
+
+ \begin{center}
+\begin{tabular}{|p{10cm}|}
+\hline
+\textbf{Definição}: NP é a classe das linguagens que têm verificadores de tempo polinomial.
+\\
+\hline
+\end{tabular}
+\end{center}
+\end{frame}
+
+\begin{frame} \frametitle{Caminho Hamiltoniano (revisitado)}
+\begin{center}
+\begin{tabular}{|p{10cm}|}
+\hline
+\textbf{Teorema:} $CAMHAM \in NP$
+\\
+\hline
+\end{tabular}
+\end{center}
+
+\textbf{Prova $\#2$:} Agora vamos mostrar que existe um verificador de tempo polinomial para o caminho Hamiltoniano. Seja $c$ um caminho Hamiltoniano $\langle p_1 \rightsquigarrow  p_m \rangle$, então construímos o verificador $V$ como segue:
+
+V = ``Sobre a entrada $\langle \langle  G, s, t\rangle, c \rangle$:
+\begin{enumerate}
+\item Verifique que $| p_1 \rightsquigarrow  p_m | = m - 1$, senão \textit{rejeite}.
+\item Verifique que $ p_1 \rightsquigarrow  p_m $ não há repetições, se houver \textit{rejeite}.
+\item Checar se $p_1 = s$ e $p_m = t$. Se o teste falhar, \textit{rejeite}.
+\item Para cada $i$ entre $1$ e $m-1$, checar se $(p_i, p_{i+1})$ é uma aresta de $G$. Caso algum não seja, rejeite. 
+\item Todos os testes passaram, aceite.''
+\end{enumerate}
+\end{frame}
+
+\begin{frame} \frametitle{Classe NP}
+ \begin{center}
+\begin{tabular}{|p{10cm}|}
+\hline
+\textbf{Teorema}: Uma linguagem está em NP sse ela é decidida  por alguma máquina de Turing não-determinística de tempo polinomial.
+\\
+\hline
+\end{tabular}
+
+\end{center}
+
+\textbf{Idéia da prova:} Mostramos como converter um verificador de tempo polinomial para uma MTN de tempo polinomial equivalente e vice e versa.
+\end{frame}
+
+	
+\begin{frame} \frametitle{Classe NP}
+ \begin{center}
+\begin{tabular}{|p{10cm}|}
+\hline
+\textbf{Teorema}: Uma linguagem está em NP sse ela é decidida  por alguma máquina de Turing não-determinística de tempo polinomial.
+\\
+\hline
+\end{tabular}
+
+\end{center}
+
+\textbf{Idéia da prova:} A MTN simula o verificador advinhando o certificado.  O verificador simula a MTN usando o ramo de computação de aceitação como certificado.
+\end{frame}
+
+\begin{frame} \frametitle{Classe NP}
+ \begin{center}
+\begin{tabular}{|p{10cm}|}
+\hline
+\textbf{Teorema}: Uma linguagem está em NP sse ela é decidida  por alguma máquina de Turing não-determinística de tempo polinomial.
+\\
+\hline
+\end{tabular}
+
+\end{center}
+\textbf{Prova:} Para a direção de frente, suponha 	que $A \in NP$ e mostre que $A$ é decidida por uma MTN de tempo polinomial $N$. Seja $V$ o verificador de tempo polinomial para $A$ que existe pela definição de NP. Assuma que $V$ seja uma MT que roda em tempo  $n^k$ e construa $N$ da seguinte maneira:
+
+N = ``Sobre a entrada $w$ de comprimento $n$:
+\begin{enumerate}
+\item Não-deterministicamente selecione uma cadeia $c$ de comprimento no máximo  $n^k$
+\item Rode $V$ sobre $\langle w, c \rangle$.
+\item Se $V$ aceita, \textit{aceite}. Caso contrário \textit{rejeite}.
+\end{enumerate}
+\end{frame}
+
+\begin{frame} \frametitle{Classe NP}
+ \begin{center}
+\begin{tabular}{|p{10cm}|}
+\hline
+\textbf{Teorema}: Uma linguagem está em NP sse ela é decidida  por alguma máquina de Turing não-determinística de tempo polinomial.
+\\
+\hline
+\end{tabular}
+\end{center}
+Para provar a outra direção do teorema,  assuma que A seja decidida por uma MTN de tempo polinomial N e construa um verificador de tempo polinomial V da seguinte maneira.
+
+V = ``Sobre a entrada $\langle w,c \rangle$, onde \textit{w} e \textit{c}  são cadeias:
+
+\begin{enumerate}
+\item  Simule N sobre a entrada w, tratar cada símbolo de c como uma descrição da escolha não-determinística a fazer a cada passo.
+\item Se esse ramo da computação de N aceita, \textit{aceite}; caso contrário, \textit{rejeite} .'' $\boxempty$
+\end{enumerate}
+\end{frame}
+
+\begin{frame} \frametitle{Clique $\in NP$}
+Um clique em um grafo não-direcionado é um subgrafo, no qual todo par de nós está conectado por uma arestas. Um \textit{\textbf{k-clique}} é um clique que contém \textit{k} nós.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=.4\textwidth]{fig03}
+ 
+ 5-clique
+\end{figure}
+
+CLIQUE = $\{ \langle G,k \rangle |$ $G$ é um grafo não-direcionado com um \textit{k-clique}$\}$
+\end{frame}
+
+\begin{frame} \frametitle{Clique $\in NP$}
+ \begin{center}
+\begin{tabular}{|p{10cm}|}
+\hline
+\textbf{Teorema}: Clique está em NP
+\\
+\hline
+\end{tabular}
+\end{center}
+
+\textbf{Prova $\#1$:} Construir um verificador V para Clique
+
+V = ``Sobre a entrada $\langle \langle G, k \rangle, c \rangle$
+\begin{enumerate}
+\item Teste se $c$ é um conjunto de $k$ nós em G.
+\item Teste se G contém todas as arestas conectando nós em $c$.
+\item Se ambos os testes retornam positivo, \textit{aceite}; caso contrário, \textit{rejeite}.'' 
+\end{enumerate}
+
+Aqui o estágio 1 e 2 executam em  $O(n^2)$, logo o verificador determinístico executa em tempo polinomial 
+
+\end{frame}
+
+ \begin{frame} \frametitle{Clique $\in NP$}
+ \begin{center}
+\begin{tabular}{|p{10cm}|}
+\hline
+\textbf{Teorema}: Clique está em NP
+\\
+\hline
+\end{tabular}
+\end{center}
+
+\textbf{Prova $\#2$:} Construir um decisor não determinístico de tempo polinomial
+
+N = ``Sobre  a entrada $\langle G, k \rangle$
+\begin{enumerate}
+\item Não deterministicamente selecione um conjunto Q de $k$ nós de G.
+\item Teste se G contém todas as arestas conectando nós em Q.
+\item Se sim, \textit{aceite}; caso contrário, \textit{rejeite}.'' 
+\end{enumerate}
+O estágio 2 roda em $O(n^2)$ com $n = |\langle G, k \rangle|$. Portanto, a MT executa em tempo polinomial não determinístico.
+\end{frame}
+
+ \begin{frame} \frametitle{Soma de subconjuntos}
+ 
+$SOMA-SUBC=\{ \langle S, t \rangle |$ $S=\{x_1, \cdots, x_k\}$ e para algum $\{y_1, \cdots, y_l\} \subseteq \{x_1, \cdots, x_k\}$, temos $\Sigma y_i = t\}$
+
+ \begin{center}
+\begin{tabular}{|p{10cm}|}
+\hline
+\textbf{Teorema}: $SOMA-SUBC$ está em NP
+\\
+\hline
+\end{tabular}
+\end{center}
+\textbf{Prova $\#1$:} O que se segue é um verificador V para $SOMA-SUBC$
+
+V = ``Sobre a entrada $\langle \langle S, t \rangle,c \rangle$
+\begin{enumerate}
+\item Teste se c é uma coleção de números que somam t.
+\item Teste se S contém todos os números de c.
+\item Se ambos os testes retornem positivo, \textbf{aceite}; caso contrário, \textbf{rejeite}''.
+
+\end{enumerate}
+\end{frame}
+
+ \begin{frame} \frametitle{Soma de subconjuntos}
+ 
+$SOMA-SUBC=\{ \langle S, t \rangle |$ $S=\{x_1, \cdots, x_k\}$ e para algum $\{y_1, \cdots, y_l\} \subseteq \{x_1, \cdots, x_k\}$, temos $\Sigma y_i = t\}$
+
+ \begin{center}
+\begin{tabular}{|p{10cm}|}
+\hline
+\textbf{Teorema}: $SOMA-SUBC$ está em NP
+\\
+\hline
+\end{tabular}
+\end{center}
+\textbf{Prova $\#2$:} Construímos uma MTN de tempo polinomial $SOMA-SUBC$
+
+N = ``Sobre a entrada $ \langle S, t \rangle$
+\begin{enumerate}
+\item Não-deterministicamente selecione um subconjunto c dos números em S.
+\item Teste se c é uma coleção de números que somam t.
+\item Se o teste der positivo, \textbf{aceite}; caso contrário, \textbf{rejeite}''.
+
+\end{enumerate}
+
+\end{frame}
+
+ \begin{frame} \frametitle{Problemas que não estão em NP}
+ $\overline{CAMHAM}$, $\overline{CLIQUE}$, $\overline{SOMA-SUBC}$ não são membros de NP.
+
+\begin{itemize}
+\item Verificar que algo não está presente parece mais difícil que verificar que está presente.
+\item coNP: linguagens que são complemento das linguagens em NP.
+\end{itemize} 
+\end{frame}
+
+ \begin{frame} \frametitle{P vs NP} 
+ \begin{figure}[ht]
+\centering
+\includegraphics[width=.9\textwidth]{fig04}
+\end{figure}
+\end{frame}
+
+ \begin{frame} \frametitle{P vs NP} 
+ Como MT é considerado um caso de MTN, então temos
+ 
+ $$P \subset NP$$
+ 
+ Ainda é uma questão aberta se  $P = NP$, já que atualmente sabemos que algoritmos para problemas NP  usam tempo exponecial	
+ 
+  $$NP \subset EXPTIME = \bigcup_{k}TIME(2^{n^k}) $$
+  
+  (Lembre-se: simular uma máquina de Turing não-determinística em uma MT determinística precisamos de tempo exponencial)
+\end{frame}
+
+\section{NP-Completude}
+ \begin{frame} \frametitle{NP-Completude} 
+  \begin{center}
+\begin{tabular}{|p{10cm}|}
+\hline
+\textbf{Definição}: Uma função $f: \Sigma^* \rightarrow \Sigma^*$ é uma \textbf{função computável em tempo polinomial} se existe alguma máquina de Turing de tempo polinomial $M$ que pára com exatamente $f(w)$ na sua fita, quando iniciada sobre qualquer entrada $w$.
+\\
+\hline
+\end{tabular}
+\end{center}
+
+  \begin{center}
+\begin{tabular}{|p{10cm}|}
+\hline
+\textbf{Definição}: Uma linguagem A é \textbf{redutível por mapeamento em tempo polinomial}, ou simplesmente \textbf{redutível em tempo polinomial}, à linguagem B, em símbolos $A \leq_p B$, se existe uma função computável em tempo polinomial $f: \Sigma^* \rightarrow \Sigma^*$, onde para toda $w$,
+$$w \in A \Leftrightarrow f(w) \in B$$
+
+A função $f$ é chamada redução de tempo polinomial de A para B. 
+\\
+\hline
+\end{tabular}
+\end{center}
+\end{frame}
+
+ 
+ \begin{frame} \frametitle{$A \leq_p B$} 
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=.6\textwidth]{fig05}
+\end{figure}
+\end{frame}
+
+ \begin{frame} \frametitle{NP-Completude} 
+  \begin{center}
+\begin{tabular}{|p{10cm}|}
+\hline
+\textbf{Teorema}: Se $A \leq_p B$ e $B \in P$, então $A \in P$
+\\
+\hline
+\end{tabular}
+\end{center}
+\textbf{ Prova:} Seja M uma algoritmo de tempo polinomial que decide B e $f$ a função de redução de tempo polinomial de A para B. Descrevemos um algoritmo polinomial N que decide A da seguinte forma:
+
+N = ``Sobre a entrada $w$:
+\begin{enumerate}
+\item Compute $f(w)$
+\item Rode M sobre a entrada $f(w)$ e dê como saída o que quer que M dê como saída.'
+\end{enumerate}
+ 
+ Claramente, se $w \in A$ então $f(w) \in B$ pois $f$ é uma redução. É fácil ver que N executa em tempo polinomial. $\boxempty$
+\end{frame}
+
+ \begin{frame} \frametitle{NP-Completude} 
+  \begin{center}
+\begin{tabular}{|p{10cm}|}
+\hline
+\textbf{Definição}: Uma linguagem $B$ é NP-Completa se satisfazem duas condições:
+
+\hspace{0.7cm}1. $B \in NP$, e
+
+\hspace{0.7cm}2. todo $A \in NP$ é redutível em tempo polinomial a $B$.
+\\
+\hline
+\end{tabular}
+\end{center}
+ 
+\end{frame}
+
+ \begin{frame} \frametitle{NP-Completude} 
+  \begin{center}
+\begin{tabular}{|p{10cm}|}
+\hline
+\textbf{Teorema}: Se $B$ for NP-Completa e $B \in P$, então $P = NP$.
+\\
+\hline
+\end{tabular}
+\end{center} 
+
+\textbf{Prova:} Esse teorema segue diretamente da definição da redutibilidade de tempo polinomial.
+  
+\end{frame}
+
+
+ \begin{frame} \frametitle{NP-Completude} 
+  \begin{center}
+\begin{tabular}{|p{10cm}|}
+\hline
+\textbf{Teorema}: Se $B$ for NP-Completa e $B \in P$, então $P = NP$.
+\\
+\hline
+\end{tabular}
+\end{center} 
+
+
+\vspace{0.7cm}Esse teorema enfatiza a importância dos problemas NP-Completos. No caso de soluções determinísticas de tempo polinomial serem encontradas para um problema NP-Completo, então a classe de complexidade NP igualaria a classe de complexidade P.   
+  
+\end{frame}
+
+
+ \begin{frame} \frametitle{NP-Completude} 
+  \begin{center}
+\begin{tabular}{|p{10cm}|}
+\hline
+\textbf{Teorema}: Se $B$ for NP-Completa e $B \leq_p C$ para $C \in NP$, então $C$ é NP-Completa.
+\\
+\hline
+\end{tabular}
+\end{center}   
+\textbf{Prova:} Seja $g_i$ uma redução de tempo polinomial de qualquer linguagem $A_i \in NP$ e $f$ uma redução de tempo polinomial de $B$ para $C$. Sabemos que $g_i$ deve existir para toda linguagem $A_i \in NP$ pois $B$ é NP-Completa. Isto nos fornece uma redução polinomial $f \circ g_i$ de qualquer linguagem $A_i$ para $C$. $\boxempty$ 
+\end{frame}
+
+
+\end{document}
+

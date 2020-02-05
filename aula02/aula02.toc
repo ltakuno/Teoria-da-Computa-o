@@ -1,0 +1,7 @@
+\babel@toc {brazil}{}
+\beamer@sectionintoc {1}{Introdu\c c\~ao}{3}{0}{1}
+\beamer@sectionintoc {2}{Linguagem Decid\IeC {\'\i }vel}{5}{0}{2}
+\beamer@sectionintoc {3}{Variantes da M\'aquina de Turing}{11}{0}{3}
+\beamer@sectionintoc {4}{Equival\^encia com outros modelos}{42}{0}{4}
+\beamer@sectionintoc {5}{Algoritmo}{46}{0}{5}
+\beamer@sectionintoc {6}{Exerc\IeC {\'\i }cio}{57}{0}{6}

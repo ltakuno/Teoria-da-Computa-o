@@ -1,0 +1,444 @@
+\documentclass{beamer}
+\usepackage[brazil]{babel}
+\usepackage[latin1]{inputenc}
+\usepackage[all]{xy}
+\usepackage{stmaryrd}
+\usepackage{verbatim}
+\usepackage{graphicx}
+\usepackage{indentfirst}
+\usepackage{float}
+\usepackage{psfrag}
+
+\usepackage{stmaryrd}
+
+\mode<presentation>{
+  
+  \usepackage{beamerthemesplit} 
+  %\usetheme[secheader]{Madrid}
+  %\usetheme{Antibes}
+  \usetheme{Warsaw}
+  %\usecolortheme{seagull}
+  %\usecolortheme{lily}
+  \usepackage{pgf,pgfarrows,pgfnodes,pgfautomata,pgfheaps,pgfshade}
+  \beamertemplatetransparentcovereddynamic
+  \beamertemplateballitem
+  \beamertemplatefootpagenumber
+  \setbeamertemplate{navigation symbols}{} 
+  %\useoutertheme{infolines} 
+  %\setbeamercolor{title}{fg=red!80!black}
+  %\setbeamercolor{normal text}{fg=red!80}
+}
+%
+\def\red{\color[rgb]{0.7,0,0}}
+\def\green{\color[rgb]{0,.8,0}}
+\def\darkgreen{\color[rgb]{0.1,0.4,0.0}}
+\let\dgreen\darkgreen
+\def\blue{\color[rgb]{0,0,.8}}
+\def\yellow{\color[rgb]{1,1,0}}
+\def\black{\color[rgb]{0,0,0}}
+
+\def\pink{\color[rgb]{1,0,1}}
+\def\brown{\color[rgb]{.5,.1,.3}}
+\def\lilaz{\color[rgb]{.5,0,.5}}
+\def\hmmm{\color[rgb]{.3,.1,.5}}
+\def\magenta{\color[rgb]{.6,.05,.05}}
+
+\title{Teoria da Computação \\ {Decidibilidade}}
+\author{{Leonardo~Takuno}\\
+\texttt{\{leonardo.takuno@gmail.com\}}}
+\date{{\dgreen Centro Universitário Senac}}
+
+
+\begin{document}
+%\maketitle				% OPTIONAL
+
+\pgfdeclareimage[height=1.0cm]{logo}{logo.eps}
+\logo{\pgfuseimage{logo}}
+
+\frame{\titlepage}
+
+\frame{
+\frametitle{Sumário}
+\tableofcontents
+}
+
+\AtBeginSection[]
+{
+ \begin{frame}
+  \frametitle{Sumário}
+  \tableofcontents[currentsection]
+ \end{frame}
+}
+\section{Introdução}
+\begin{frame} \frametitle{ Decidibilidade }
+
+Estamos prontos para atacar a questão:
+\begin{center}
+\begin{tabular}{|p{9.0cm}|}
+\hline
+O que os computadores podem ou não fazer ? \\
+\hline
+\end{tabular}
+\end{center}
+
+Fazemos isso por considerar as questões:
+
+\begin{center}
+\begin{tabular}{|p{9.0cm}|}
+\hline
+Quais linguagens são Turing decidíveis, Turing reco\-nhecíveis, ou nenhum ?  \\
+\hline
+\end{tabular}
+\end{center}
+
+Assumindo a tese de Church-Turing, essas são propriedades fundamentais das linguagens.
+\end{frame}
+\section{Decidibilidade}
+\begin{frame} \frametitle{ Decidibilidade }
+\begin{itemize}
+	\item Para mostrar que uma linguagem é decidível:
+	
+\begin{itemize}
+	\item Escreva um decisor que a decide:
+	\item Deve-se mostrar que o decisor:
+	
+\begin{itemize}
+	\item Pára sobre todas as entradas;
+	\item Aceita $w$ se e somente se $w$ pertence à linguagem;
+\end{itemize}
+\end{itemize}
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame} \frametitle{ Decidibilidade }
+Vamos estudar algum \textbf{padrão} de máquinas que são decisores. 
+Estas máquinas nos ajudarão a construir provas mais complicadas.
+\end{frame}
+
+\section{Linguagens regulares}
+\begin{frame} \frametitle{ Decidibilidade }
+\begin{center}
+\begin{tabular}{|p{11.0cm}|}
+\hline
+\textbf{Teorema: }A linguagem
+$$A_{AFD} = \{ \langle B, w \rangle  | \textrm{B é um AFD que aceita a cadeia de entrada }w\} $$
+é decidível. \\
+\hline
+\end{tabular}
+\end{center}
+
+\textbf{Prova:} Construimos um decisor $M_{AFD}$ para $A_{AFD}$.
+
+$M_{AFD}$ = ``Sobre a entrada $\langle B, w \rangle$, onde B é um AFD, e $w$, uma cadeia:
+\begin{enumerate}
+	\item Simule $B$ sobre a entrada $w$;
+	\item Se a simulação termina em um estado de aceitação, \textbf{aceite}. Se ela termina em um estado de não-aceitação, \textbf{rejeite}''
+\end{enumerate}
+\end{frame}
+
+
+
+
+\begin{frame} \frametitle{ Decidibilidade }
+\begin{center}
+\begin{tabular}{|p{11.0cm}|}
+\hline
+\textbf{Teorema: }A linguagem
+$$ A_{AFN} = \{ \langle B, w \rangle  | \textrm{B é um AFN que aceita a cadeia de entrada }w \} $$
+é decidível. \\
+\hline
+\end{tabular}
+\end{center}
+
+
+\textbf{Prova:} 
+Construimos um decisor $N_{AFN}$ para $A_{AFN}$.
+
+$N_{AFN}$ = ``Sobre a entrada $\langle B, w \rangle$ onde B é um AFN, e $w$, uma cadeia:
+\begin{enumerate}
+	\item Converta AFN B para um AFD equivalente C, usando um procedimento para essa conversão.
+	\item Rode a MT $M_{AFD}$  sobre a entrada $\langle C, w \rangle$.
+	\item Se $M_{AFD}$ aceita, \emph{aceite}; caso contrário, \emph{rejeite}''.
+\end{enumerate}
+
+\end{frame}
+
+
+
+\begin{frame} \frametitle{ Decidibilidade }
+\begin{center}
+\begin{tabular}{|p{11.0cm}|}
+\hline
+\textbf{Teorema: }A linguagem
+$$A_{EXR} = \{ \langle R, w \rangle | R \textrm{ é uma expressão regular que gera a cadeia }w\}$$
+é decidível. \\
+\hline
+\end{tabular}
+\end{center}
+
+
+\textbf{Prova:} 
+Construimos um decisor $P_{EXR}$ para $A_{EXR}$.
+
+$P_{EXR}$ = ``Sobre a entrada $\langle R, w \rangle$, onde R é uma expressão regular e $w$ é uma cadeia:
+\begin{enumerate}
+	\item Converta a expressão regular R para um AFN equivalente A usando um procedimento para essa conversão.
+	\item Rode a MT $N_{AFN}$ sobre a entrada $\langle A, w \rangle$
+	\item Se N aceita, \emph{aceite}, se N rejeita, \emph{rejeite}''
+\end{enumerate}
+
+\end{frame}
+
+\begin{frame} \frametitle{ Decidibilidade }
+\begin{center}
+\begin{tabular}{|p{11.0cm}|}
+\hline
+\textbf{Teorema: }A linguagem
+$$V_{AFD} = \{ \langle A \rangle | A\textrm{ é um AFD e L(A) = 0}\}$$
+é decidível. \\
+\hline
+\end{tabular}
+\end{center}
+
+
+\textbf{Prova:} 
+Construimos um decisor T para $V_{AFD}$.
+
+T = ``Sobre a entrada $ \langle A \rangle$ onde A é um AFD:
+\begin{enumerate}
+	\item Marque o estado inicial de A;
+	\item Repita até que nenhum estado novo venha a ser marcado.
+	\item Marque qualquer estado que tenha uma transição chegando nele a partir de qualquer estado que já está marcado.
+	\item Se nenhum estado de aceitação estiver marcado, \emph{aceite}, caso contrário \emph{rejeite}.
+\end{enumerate}
+\end{frame}
+
+\begin{frame} \frametitle{ Decidibilidade }
+\begin{center}
+\begin{tabular}{|p{11.0cm}|}
+\hline
+\textbf{Teorema: }A linguagem
+$$EQ_{AFD} = \{ \langle A,B \rangle | \textrm{ A e B são AFDs e L(A) = L(B)}\}$$
+é decidível. \\
+\hline
+\end{tabular}
+\end{center}
+
+
+\textbf{Prova:} Para provar esse teorema construímos um novo AFD C que aceita somente as cadeias que são aceitas ou por A ou por B, mas não por ambos. Isto é,
+\begin{eqnarray} \label{lc:teo}
+L(C) = (L(A) \cap \overline{L(B)}) \cup (\overline{L(A)} \cap L(B)).
+\end{eqnarray}
+
+Além disso, L(C) = $\emptyset$ implica L(A) = L(B). A classe das linguagens regulares é fechada sob complemento, união e intersecção. Portanto é possível construir uma máquina C de acordo com \ref{lc:teo}
+\end{frame}
+
+\begin{frame} \frametitle{Decidibilidade}
+Podemos construir um decisor $M_{EQDFA}$ para $EQ_{AFD}$.
+
+$M_{EQDFA}$ = ``Sobre a entrada $ \langle A, B \rangle$ onde A e B são AFDs:
+\begin{enumerate}
+	\item Construa o AFD C conforme descrito em \ref{lc:teo}. 
+	\item Rode a MT T do Teorema anterior sobre a entrada $ \langle C \rangle$.
+	\item Se T aceita, \emph{aceite}. Se T rejeita, \emph{rejeite}''
+\end{enumerate}
+\end{frame}
+
+\section{Linguagens livres de contexto}
+
+\begin{frame} \frametitle{Decidibilidade}
+\begin{center}
+\begin{tabular}{|p{11.0cm}|}
+\hline
+\textbf{Teorema: }A linguagem
+$$A_{GLC} = \{ \langle G,w \rangle | \textrm{ G é uma GLC que gera a cadeia } w \}$$
+é decidível. \\
+\hline
+\end{tabular}
+\end{center}
+
+\textbf{Prova :} Constuir a MT S para $A_{GLC}$ :
+
+S = ``Sobre $\langle G, w \rangle$, onde G é uma GLC, e $w$, uma cadeia:
+\begin{enumerate}
+	\item Converta G para uma gramática equivalente na forma normal de Chomsky
+	\item Liste todas as derivações com $2n - 1$ passos, onde $n$ é o comprimento de w, exceto se $n=0$; nesse último caso, liste todas as derivações com 1 passo.
+	\item Se alguma dessas derivações gera $w$, \emph{aceite}; se não, \emph{rejeite}''
+\end{enumerate}
+ \textbf{Obs.:} A computação é limitada por $2n - 1 \rightarrow$ decisor.
+
+\end{frame}
+
+
+\begin{frame} \frametitle{Decidibilidade}
+\begin{center}
+\begin{tabular}{|p{11.0cm}|}
+\hline
+\textbf{Teorema: }A linguagem
+$$V_{GLC} = \{ \langle G \rangle |  \textrm{G é uma GLC e }L(G) = 0\}$$
+é decidível. \\
+\hline
+\end{tabular}
+\end{center}
+
+\textbf{Prova:} Construa uma MT R para $V_{GLC}$
+
+R = ``Sobre a entrada $\langle G \rangle$, onde G é uma GLC:
+\begin{enumerate}
+	\item Marque todos os símbolos terminais em G;
+	\item Repita até que nenhuma variável venha a ser marcada;
+	\item Marque qualquer variável A onde G tem uma regra $A \rightarrow U_1 U_2 \cdots U_k$ e cada símbolo $U_1 U_2 \cdots U_k$ já tenha sido marcado.
+	\item Se a variável inicial não está marcada, \textit{aceite}, caso contrário, \textit{rejeite}.
+\end{enumerate}
+\end{frame}
+
+\begin{frame} \frametitle{Igualdade de GLCs}
+
+\begin{center}
+
+\begin{tabular}{|p{11.0cm}|}
+\hline
+E sobre a a igualdade das linguagens
+$$EQ_{GLC} = \{ \langle G,H \rangle |  \textrm{G e H são GLCs com }L(G) = L(H)\}$$
+? \\
+\hline
+\end{tabular}
+\end{center}
+
+\begin{itemize}
+	\item Para AFDs podemos usar o procedimento de decisão para $V_{AFD}$ para provar que $EQ_{AFD}$ é decidível.
+  \item Para GLCs não é possível ... (Por quê?)
+  
+  ... Por que GLCs não são fechados sobre o complemento e sobre a intersecção.
+  
+  Mais tarde veremos que $EQ_{GLC}$ não é decidível.
+\end{itemize}
+
+\end{frame}
+
+\begin{frame} \frametitle{Decidibilidade}
+\begin{center}
+
+\begin{tabular}{|p{11.0cm}|}
+\hline
+\textbf{Teorema:} Toda Linguagem livre-de-contexto é decidível. \\
+\hline
+\end{tabular}
+\end{center}
+
+\textbf{Prova:} Utilizaremos a MT $S$ que decide $A_{GLC}$. Seja G uma GLC para A e projetemos uma MT $M_G$ que decide A. 
+
+$M_{G}$ = ``Sobre a entrada $w$ :
+\begin{enumerate}
+	\item Rode a MT $S$ sobre a entrada $\langle G, w \rangle$.
+	\item Se essa máquina aceita, \emph{aceite}; se ela rejeita, \emph{rejeite}.''
+\end{enumerate}
+
+\end{frame}
+
+\begin{frame} \frametitle{ Concatenação }
+Proposição : Sejam L1 e L2 linguagens decidíveis, então a concatenação L = L1 . L2
+é também decidível.
+
+\textbf{Prova:} Mostramos decidibilidade de L construindo um decisor para ele. Seja M1 e M2 decisores para L1 e L2, respectivamente, então podemos construir um decisor M para L como segue: 
+
+M = ``Sobre a entrada $w$,
+\begin{enumerate}
+	\item Para cada caminho divida $w$ em duas partes, $w = w_1w_2$, faça
+	\item Execute M1 sobre $w_1$
+	\item Execute M2 sobre $w_2$
+	\item Se qualquer combinação M1 e M2 aceita, aceite; caso contrário, rejeite.''
+\end{enumerate}
+\end{frame}
+
+\section{Exercícios}
+
+\begin{frame} \frametitle{ Exercícios }
+
+1) Considere o problema de determinar se um AFD e uma expressão regular são equivalentes. Expresse este problema como linguagem e mostre que é decidível.
+
+\end{frame}
+
+\begin{frame} \frametitle{ Exercícios (Solução) }
+
+\textbf{Solução:} Formulamos o problema como $EQ_{AFD,ER} = \{\langle A, R \rangle | A$ é um AFD, $R$ é uma expressão regular e $L(A) = L(R)\}$. Construa a máquina T que decide $EQ_{AFD,ER}$.
+
+T = ``Sobre a entrada $\{\langle A, R \rangle$ onde $A$ é um AFD e $R$ é uma expressão regular
+
+\begin{enumerate}
+\item Converta $R$ em um AFD $B$ equivalente. Portanto, $L(B) = L(R)$.
+\item Execute a MT $MEQDFA$ que decide $EQ_{AFD}$ sobre a entrada $\langle A, B\rangle$.
+\item Aceite se $MEQDFA$ aceita, e rejeite caso contrário.
+\end{enumerate}
+\end{frame}
+
+\begin{frame} \frametitle{ Exercícios }
+2) Seja $TODAS_{AFD} = \{ \langle A \rangle |A$ é um AFD e $L(A) = \Sigma^* \}$
+mostre que $TODAS_{AFD}$ é decidível.
+\end{frame}
+
+\begin{frame} \frametitle{ Exercícios  (Solução)}
+\textbf{Solução:} Construiremos uma MT M que decida $TODAS_{AFD}$. Para isso usaremos o decisor T que decide $V_{AFD}$
+
+M = ``Sobre a entrada $\langle A \rangle$ onde $A$ é um AFD:
+
+\begin{enumerate}
+\item Construir um AFD B tal que $L(B) = \overline{L(A)}$.
+\item Execute T sobre a entrada $\langle B \rangle$. Dê como saída o que T der como saída.
+\end{enumerate}
+
+Como $V_{AFD}$ é decidível, $TODAS_{AFD}$ é decidível.
+\end{frame}
+
+\begin{frame} \frametitle{ Exercícios }
+
+3) Seja $INFINITA_{AFD}= \{\langle A \rangle | A$ é um AFD e $L(A)$ é uma linguagem infinita $\}$. Mostre que $INFINITA_{AFD}$ é decidível.
+
+\end{frame}
+
+\begin{frame} \frametitle{ Exercícios  (Solução)}
+\textbf{Solução:} A seguinte máquina de Turing M decide $INFINITA_{AFD}$.
+
+M = "Sobre a entrada $\langle A \rangle$ onde A é AFD
+
+\begin{enumerate}
+\item Seja k o número de estados de A
+\item Construa um AFD D que aceite todas as cadeias de comprimento $k$ ou mais.
+\item Construa um AFD M tal que $L(M) = L(A) \cap L(B)$
+\item Teste $L(M) = \emptyset$, usando o decisor T de $V_{AFD}$
+\item Se T aceita, rejeite; se T rejeita, aceite
+\end{enumerate} 
+
+Uma cadeia de comprimento k ou mais, onde k é o número de estados do AFD pode ser bombeada de maneira prescrita no lema de bombeamento para linguagens regulares para se obter uma quantidade infinita de cadeias aceitas.
+\end{frame}
+
+\begin{frame} \frametitle{ Exercícios }
+4) Seja $A = \{\langle M \rangle| M$ é um AFD que não aceita nenhuma cadeia contendo um número ímpar de 1s$\}$. Mostre que A é decidível.
+\end{frame}
+
+\begin{frame} \frametitle{ Exercícios  (Solução)}
+A seguinte MT M decide A
+
+M = "Sobre a entrada $\langle M \rangle$:
+\begin{enumerate}
+\item Construa um AFD O que aceite toda cadeia contendo um número ímpar de 1s.
+\item Construa o AFD B tal que $L(B) = L(M) \cap L(O)$.
+\item Teste se $L(B) = \emptyset$, usando o decisor T de $V_{AFD}$.
+\item Se T aceita, aceite; se T rejeita, rejeite
+
+\end{enumerate}
+\end{frame}
+
+\begin{frame} \frametitle{ Exercícios (Para casa) }
+5) Seja $A = \{\langle R,S \rangle| $ R e S são expressões regulares e $L(R) \subseteq L(S)  \}$. Mostre que A é decidível.
+
+6) Seja $INFINITA_{AP}= \{\langle M \rangle | M$ é um AP e $L(M)$ é uma linguagem infinita $\}$. Mostre que $INFINITA_{AP}$ é decidível.
+\end{frame}
+
+
+\end{document}
+
+
+

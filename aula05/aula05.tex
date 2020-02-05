@@ -1,0 +1,759 @@
+\documentclass{beamer}
+\usepackage[brazil]{babel}
+\usepackage[latin1]{inputenc}
+\usepackage[all]{xy}
+\usepackage{stmaryrd}
+\usepackage{verbatim}
+\usepackage{graphicx}
+\usepackage{indentfirst}
+\usepackage{float}
+\usepackage{psfrag}
+
+\usepackage{stmaryrd}
+
+\mode<presentation>{
+  
+  \usepackage{beamerthemesplit} 
+  %\usetheme[secheader]{Madrid}
+  %\usetheme{Antibes}
+  \usetheme{Warsaw}
+  %\usecolortheme{seagull}
+  %\usecolortheme{lily}
+  \usepackage{pgf,pgfarrows,pgfnodes,pgfautomata,pgfheaps,pgfshade}
+  \beamertemplatetransparentcovereddynamic
+  \beamertemplateballitem
+  \beamertemplatefootpagenumber
+  \setbeamertemplate{navigation symbols}{} 
+  %\useoutertheme{infolines} 
+  %\setbeamercolor{title}{fg=red!80!black}
+  %\setbeamercolor{normal text}{fg=red!80}
+}
+%
+\def\red{\color[rgb]{0.7,0,0}}
+\def\green{\color[rgb]{0,.8,0}}
+\def\darkgreen{\color[rgb]{0.1,0.4,0.0}}
+\let\dgreen\darkgreen
+\def\blue{\color[rgb]{0,0,.8}}
+\def\yellow{\color[rgb]{1,1,0}}
+\def\black{\color[rgb]{0,0,0}}
+
+\def\pink{\color[rgb]{1,0,1}}
+\def\brown{\color[rgb]{.5,.1,.3}}
+\def\lilaz{\color[rgb]{.5,0,.5}}
+\def\hmmm{\color[rgb]{.3,.1,.5}}
+\def\magenta{\color[rgb]{.6,.05,.05}}
+
+\title{Teoria da Computação \\ {Indecidibilidade}}
+\author{{Leonardo~Takuno}\\
+\texttt{\{leonardo.takuno@gmail.com\}}}
+\date{{\dgreen Centro Universitário Senac}}
+
+
+\begin{document}
+%\maketitle				% OPTIONAL
+
+\pgfdeclareimage[height=1.0cm]{logo}{logo.eps}
+\logo{\pgfuseimage{logo}}
+
+\frame{\titlepage}
+
+\frame{
+\frametitle{Sumário}
+\tableofcontents
+}
+
+\AtBeginSection[]
+{
+ \begin{frame}
+  \frametitle{Sumário}
+  \tableofcontents[currentsection]
+ \end{frame}
+}
+
+\section{Apresentação}
+\begin{frame} \frametitle{ Apresentação }
+\begin{itemize}
+	\item Apresentar outros problemas indecidíveis
+	\item Redutibilidade
+	
+\begin{itemize}
+	\item Método para relacionar dois problemas indecidíveis.
+	\item Mapeamento de redutibilidade
+\end{itemize}
+\end{itemize}
+
+
+\end{frame}
+
+\section{Redutibilidade}
+
+\begin{frame} \frametitle{ Redutibilidade }
+\begin{itemize}
+	\item Dizemos que um problema Q reduz ao problema P se podemos usar P para resolver Q.
+	\item No contexto da Teoria da computabilidade dizemos:
+	
+\begin{itemize}
+	\item Se A for redutível a B e B for decidível, A também será decidível; e
+	\item Se A for redutível a B e A for indecidível, B também será indecidível.
+\end{itemize}
+
+  \item Isto permite provar que vários problemas são indecidíveis.
+\end{itemize}
+\end{frame}
+
+\begin{frame} \frametitle{ Redutibilidade }
+\begin{itemize}
+	\item Em outras palavras:
+	
+\begin{itemize}
+	\item Para mostrar que um novo problema A é decidível, mostre como transformá-lo em um problema decidível conhecido B para que a solução de B possa ser usada para resolver A.
+	\item Para mostrar que um novo problema A é indecidível, mostre como transformar um problema indecidível conhecido B em A para que A possa ser usado para resolver B.
+\end{itemize}
+	\item Redutibilidade é uma das técnicas mais importantes e mais usadas na teoria da computação.
+\end{itemize}
+\end{frame}
+
+\begin{frame} \frametitle{ Redutibilidade }
+
+Vamos utilizar a redutibilidade para provar o seguinte:
+
+\begin{center}
+\begin{tabular}{|p{9.7cm}|}
+\hline
+\textbf{Teorema 5.1:} A linguagem $$PARA_{MT} = \{ \langle M,w \rangle | \textrm{M é uma MT e M pára sobre w}\}$$ é indecidível. \\
+\hline
+\end{tabular}
+
+\begin{itemize}
+	\item Sabemos que $A_{MT} = \{ \langle M, w \rangle | M $  é uma MT que aceita $w\} $ é indecidível.
+	\item Idéia:
+	
+\begin{itemize}
+	\item Suponha que $PARA_{MT}$ é decidível
+	\item Mostre que podemos usar $PARA_{MT}$ para decidir $A_{MT}$. (Redução)
+	\item Conclua que $A_{MT}$ é decidível. Contradição.
+\end{itemize}
+\end{itemize}
+
+\end{center}
+
+\end{frame}
+
+\begin{frame} \frametitle{ Redutibilidade }
+
+\begin{center}
+\begin{tabular}{|p{9.7cm}|}
+\hline
+\textbf{Teorema 5.1:} A linguagem $$PARA_{MT} = \{ \langle M,w \rangle | \textrm{M é uma MT e M pára sobre w}\}$$ é indecidível. \\
+\hline
+\end{tabular}
+\end{center}
+
+	
+\textbf{Prova:} Prova por contradição. Supomos que $PARA_{MT}$ seja decidível e usamos essa suposição para mostrar que $A_{MT}$ é decidível, contradizendo o Teorema 4.11. Suponha que MT R decida $PARA_{MT}$. 	
+
+\end{frame}
+
+\begin{frame} \frametitle{ Redutibilidade }
+
+\begin{center}
+\begin{tabular}{|p{9.7cm}|}
+\hline
+\textbf{Teorema 5.1:} A linguagem $$PARA_{MT} = \{ \langle M,w \rangle | \textrm{M é uma MT e M pára sobre w}\}$$ é indecidível. \\
+\hline
+\end{tabular}
+\end{center}
+
+
+Construímos a MT S para decidir $A_{MT}$ da seguinte forma:
+
+		S = ``Sobre a entrada $\langle M, w \rangle$, uma codificação de uma MT M e uma cadeia $w$:
+\begin{enumerate}
+	\item Rode MT R sobre a entrada $\langle M, w \rangle$
+	\item Se R rejeita, \textit{rejeite}
+	\item Se R aceita, simule M sobre $w$ até que ela pare
+	\item Se M aceita, \textit{aceite}; se M rejeita, \textit{rejeite} '' 
+\end{enumerate}
+\end{frame}
+
+\begin{frame} \frametitle{ Redutibilidade }
+
+
+Nós vimos que $A_{MT}$ é indecidível, logo é uma contradição e nossa hipótese de que $PARA_{MT}$ é decidível deve ser incorreta. $\boxempty$
+
+\end{frame}
+
+\begin{frame} \frametitle{ Redutibilidade }
+\begin{center}
+\begin{tabular}{|p{9.7cm}|}
+\hline
+\textbf{Teorema 5.2:} A linguagem $$V_{MT} = \{ \langle M \rangle | \textrm{M é uma MT L(M) = }\oslash \}$$ é indecidível.\\
+\hline
+\end{tabular}
+\end{center}
+
+\begin{itemize}
+	\item Utilizando a idéia anterior:
+	
+\begin{itemize}
+	\item Seja R uma MT que decida $V_{MT}$
+	\item Usaremos R para construir uma máquina MT S que decide $A_{MT}$
+	\item Prove $A_{MT}$ é decidível. Contradição.
+	\item Então a MT R não pode existir.
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame} \frametitle{ Redutibilidade }
+\begin{center}
+\begin{tabular}{|p{9.7cm}|}
+\hline
+\textbf{Teorema 5.2:} A linguagem $$V_{MT} = \{ \langle M \rangle | \textrm{M é uma MT L(M) = }\oslash \}$$ é indecidível.\\
+\hline
+\end{tabular}
+\end{center}
+
+Como S funcionará quando ela receber a entrada $\langle M, w \rangle$
+\begin{itemize}
+	\item \textbf{Idéia 1:} 
+	
+	\begin{itemize}
+		\item Rodar R sobre a entrada $\langle M \rangle$ e ver se aceita. 
+		\item Se aceita, sabemos que $L(M) = \oslash$, então $M$ não aceita $w$. 
+		\item Mas se R rejeita $\langle M \rangle$, M aceita alguma cadeia, mas não sabemos se $M$ aceita $w$. 
+		\item \textbf{Assim, usaremos uma idéia diferente}.
+\end{itemize}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame} \frametitle{ Redutibilidade }
+\begin{center}
+\begin{tabular}{|p{9.7cm}|}
+\hline
+\textbf{Teorema 5.2:} A linguagem $$V_{MT} = \{ \langle M \rangle | \textrm{M é uma MT L(M) = }\oslash \}$$ é indecidível.\\
+\hline
+\end{tabular}
+\end{center}
+
+Como S funcionará quando ela receber a entrada $\langle M, w \rangle$
+\begin{itemize}
+	\item \textbf{Idéia 2:} 
+	
+\begin{itemize}
+	\item Em vez de rodar R sobre $\langle M \rangle$, rodamos R sobre uma modificação de $\langle M \rangle$, a qual chamaremos de $M1$. 
+	\item $M1$ rejeita todas as cadeias, exceto $w$. 
+	\item Então usamos R para determinar se M1 reconhece uma linguagem vazia. 
+	\item Se a linguagem é vazia, então $M1$ não aceita $w$, caso contrário, $M1$ aceita $w$.
+\end{itemize}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame} \frametitle{ Redutibilidade }
+\begin{center}
+\begin{tabular}{|p{9.7cm}|}
+\hline
+\textbf{Teorema 5.2:} A linguagem $$V_{MT} = \{ \langle M \rangle | \textrm{M é uma MT L(M) = }\oslash \}$$ é indecidível.\\
+\hline
+\end{tabular}
+\end{center}
+	
+	\textbf{Prova:} Por contradição. Assuma que $V_{MT}$ é decidível e R é o decisor, e aí mostramos que $A_{MT}$ é decidível - uma contradição. Supomos que a MT R decide $V_{MT}$ e construímos a MT S que decide $A_{MT}$.
+\end{frame}
+
+\begin{frame} \frametitle{ Redutibilidade }
+\begin{center}
+\begin{tabular}{|p{9.7cm}|}
+\hline
+\textbf{Teorema 5.2:} A linguagem $$V_{MT} = \{ \langle M \rangle | \textrm{M é uma MT L(M) = }\oslash \}$$ é indecidível.\\
+\hline
+\end{tabular}
+\end{center}
+	
+	S = ``Sobre a entrada $\langle M, w \rangle$, uma codificação de uma MT M e uma cadeia $w$:
+\begin{enumerate}
+  \item Construa a máquina M1 a seguir :
+
+   M1 = `` Sobre a entrada $x$
+	\begin{enumerate}
+		\item Se $x \neq w$, rejeite
+		\item Se $x = w$, rode M sobre a entrada $w$ e aceite se M aceita.
+	\end{enumerate}
+	\item Execute R sobre $\langle M1 \rangle$
+	\item Se R aceita, rejeite, se R rejeita, aceite.'' $\boxempty$
+\end{enumerate}
+\end{frame}
+
+\begin{frame} \frametitle{ Redutibilidade }
+\begin{center}
+\begin{tabular}{|p{11.0cm}|}
+\hline
+\textbf{Teorema 5.3:} A linguagem $$REGULAR_{MT} = \{ \langle M \rangle | \textrm{M é MT e L(M) é uma linguagem regular}\}$$ é indecidível. \\
+\hline
+\end{tabular}
+\end{center}
+
+\begin{itemize}
+	\item Suponha que $REGULAR_{MT}$ é decidível por uma MT R.
+	\item Usaremos essa suposição para construir uma MT S que decide $A_{MT}$ - uma contradição.
+\end{itemize}
+\end{frame}
+
+\begin{frame} \frametitle{ Redutibilidade }
+\begin{center}
+\begin{tabular}{|p{11.0cm}|}
+\hline
+\textbf{Teorema 5.3:} A linguagem $$REGULAR_{MT} = \{ \langle M \rangle | \textrm{M é MT e L(M) é uma linguagem regular}\}$$ é indecidível. \\
+\hline
+\end{tabular}
+\end{center}
+
+\begin{itemize}
+		\item \textbf{idéia:} Sobre a entrada $\langle M, w \rangle$, modificar M de modo que a máquina resultante M2 reconhece uma linguagem regular se, e somente se, M reconhece $w$. Assim, temos
+
+\begin{itemize}
+\item Se $w \in L(M)$ então  $L(M2) = \Sigma^*$ (Uma linguagem regular qualquer)
+\item Se $w \notin L(M)$ então $L(M2) = \{0^n1^n| n \geq 0\}$ (Uma linguagem qualquer que não seja regular)
+\end{itemize}		
+		
+\end{itemize}
+	
+	 
+\end{frame}
+
+\begin{frame} \frametitle{ Redutibilidade }
+\begin{center}
+\begin{tabular}{|p{11.0cm}|}
+\hline
+\textbf{Teorema 5.3:} A linguagem $$REGULAR_{MT} = \{ \langle M \rangle | \textrm{M é MT e L(M) é uma linguagem regular}\}$$ é indecidível. \\
+\hline
+\end{tabular}
+\end{center}
+
+A máquina S decide $A_{MT}$, construída usando R é:
+
+S = ``Entrada $\langle M,w \rangle$, onde M é uma MT e $w$ é uma string
+\begin{enumerate}
+	\item Construa uma MT M2:
+	
+	M2 = Entrada string $x$
+\begin{enumerate}
+	\item[1.] Se $x$ tem a forma $0^n 1^n$, aceite
+	\item[2.] Se $x$ não tem essa forma, então executa M sobre a entrada $w$ e aceita, se M aceita $w$.
+\end{enumerate}
+  \item Execute R sobre a entrada $\langle M2 \rangle$
+  \item Se R aceita, \textit{aceite}; se R rejeita, \textit{rejeite} .'' $\boxempty$
+\end{enumerate}
+\end{frame}
+
+\begin{frame} \frametitle{ Redutibilidade }
+
+\begin{center}
+\begin{tabular}{|p{9.7cm}|}
+\hline
+\textbf{Teorema 5.4:} A linguagem $$EQ_{MT} = \{ \langle M1, M2 \rangle | M_1\textrm{ e } M_2 \textrm{ são MTs e } L(M_1) = L(M_2)\}$$ é indecidível.\\
+\hline
+\end{tabular}
+\end{center}
+\begin{itemize}
+	\item $V_{MT} = \{ \langle M \rangle | $ M é uma MT L(M) = $\oslash \}$
+	\item $V_{MT}$ é redutível a $EQ_{MT}$
+	\item Mostre que se $EQ_{MT}$ fosse decidível, $V_{MT}$ também seria.
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame} \frametitle{ Redutibilidade }
+
+\begin{center}
+\begin{tabular}{|p{9.7cm}|}
+\hline
+\textbf{Teorema 5.4:} A linguagem $$EQ_{MT} = \{ \langle M1, M2 \rangle | M_1\textrm{ e } M_2 \textrm{ são MTs e } L(M_1) = L(M_2)\}$$ é indecidível.\\
+\hline
+\end{tabular}
+\end{center}
+\begin{itemize}
+	\item Mostre que se $EQ_{MT}$ fosse decidível, $V_{MT}$ também seria.
+\begin{itemize}
+	\item Assuma que uma MT R decide $EQ_{MT}$ e construa uma MT S para decidir $V_{MT}$
+	\item Utilize uma MT M1 que rejeite todas as entradas, ou seja, tenha linguagem vazia
+	\item Utilize R para comparar M com M1 e verificar se $L(M)=\oslash$, aceitando ou rejeitando.
+	\item Conclua que $V_{MT}$ é decidível. Contradição.
+\end{itemize}
+	
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame} \frametitle{ Redutibilidade }
+
+\begin{center}
+\begin{tabular}{|p{9.7cm}|}
+\hline
+\textbf{Teorema 5.4:} A linguagem $$EQ_{MT} = \{ \langle M1, M2 \rangle | M_1\textrm{ e } M_2 \textrm{ são MTs e } L(M_1) = L(M_2)\}$$ é indecidível.\\
+\hline
+\end{tabular}
+\end{center}
+\textbf{Prova:} Por contradição. Assuma que $EQ_{MT}$ é decidível e R é um decisor. Mostramos que $V_{MT}$ reduz $EQ_{MT}$ por construir um decisor S para decidir $V_{MT}$.
+
+\end{frame}
+
+\begin{frame} \frametitle{ Redutibilidade }
+
+\begin{center}
+\begin{tabular}{|p{9.7cm}|}
+\hline
+\textbf{Teorema 5.4:} A linguagem $$EQ_{MT} = \{ \langle M1, M2 \rangle | M_1\textrm{ e } M_2 \textrm{ são MTs e } L(M_1) = L(M_2)\}$$ é indecidível.\\
+\hline
+\end{tabular}
+\end{center}
+
+S = ``Sobre a entrada $\langle M \rangle$, onde M é uma MT:
+\begin{enumerate}
+	\item Rode R sobre a entrada $\langle M, M_1 \rangle$, onde $M_1$ é uma MT que rejeita todas as entradas. 
+	\item Se R aceita, \textit{aceite}; se R rejeita, \textit{rejeite}.''
+\end{enumerate}
+
+Se R decide $EQ_{MT}$, S decide $V_{MT}$. Mas $V_{MT}$ é indecidível pelo Teorema 5.2 portanto $EQ_{MT}$ também tem de ser indecidível. $\boxempty$
+\end{frame}
+
+\section{ Teorema de Rice }
+
+\begin{frame} \frametitle{ Teorema de Rice }
+\begin{center}
+\begin{tabular}{|p{9.7cm}|}
+\hline
+\textbf{Teorema:} Todo teste de qualquer propriedade (não trivial) de linguagens reconhecidas por máquinas de Turing é indecidível.\\
+\hline
+\end{tabular}
+\end{center}
+
+\textbf{Uma classe de problemas:} Seja P uma linguagem constituída de descrições de máquinas de Turing, em que P satisfaz duas condições.
+
+\begin{enumerate}
+	\item P é não-trivial: ela contém alguma descrição, mas não todas as descrições de MTs.
+\begin{itemize}
+	\item existe uma MT M1 para o qual $\langle M1 \rangle \in P$ , e
+	\item existe uma MT M2 para o qual $\langle M2 \rangle \notin P$
+\end{itemize}
+	
+	\item P é uma propriedade da linguagem da linguagem da MT
+		$$ \mbox{se } L(M1) = L(M2) \mbox{ então } \langle M1 \rangle \in P \mbox{ sse } \langle M2 \rangle \in P$$
+
+\end{enumerate}
+
+\end{frame}
+
+
+\begin{frame} \frametitle{ Teorema de Rice }
+\begin{center}
+\begin{tabular}{|p{9.7cm}|}
+\hline
+\textbf{Teorema:} Todo teste de qualquer propriedade (não trivial) de linguagens reconhecidas por máquinas de Turing é indecidível.\\
+\hline
+\end{tabular}
+\end{center}
+
+exemplo: 
+\begin{itemize}
+	\item Testar se a linguagem reconhecida por uma MT é livre do contexto.
+	\item Testar se linguagem reconhecida por uma MT é decidível.
+	\item Testar se a linguagem reconhecida por uma máquina de Turing é finito.
+\end{itemize}
+\end{frame}
+
+\begin{frame} \frametitle{ Teorema de Rice }
+\begin{center}
+\begin{tabular}{|p{9.7cm}|}
+\hline
+\textbf{Teorema:} Todo teste de qualquer propriedade (não trivial) de linguagens reconhecidas por máquinas de Turing é indecidível.\\
+\hline
+\end{tabular}
+\end{center}
+
+\textbf{Prova:} Por contradição. Seja P uma propriedade não-trivial. Queremos mostrar que 
+$$L_P = \{ \langle M \rangle | L(M)\textrm{ satisfaz } P\}, $$
+é indecidível. 
+
+Assuma que $L_P$ seja decidível e $M_P$ é um decisor. Mostramos que podemos construir um decisor S para $A_{MT}$.
+
+
+\end{frame}
+
+\begin{frame} \frametitle{ Teorema de Rice }
+\begin{center}
+\begin{tabular}{|p{9.7cm}|}
+\hline
+\textbf{Teorema:} Todo teste de qualquer propriedade (não trivial) de linguagens reconhecidas por máquinas de Turing é indecidível.\\
+\hline
+\end{tabular}
+\end{center}
+
+S = ``Sobre a entrada $\langle M, w \rangle$, onde M é uma MT e $w$ uma string:
+\begin{enumerate}
+	\item Use MT M e $w$ para construir a seguinte MT M':
+
+	M' = Sobre a entrada $\langle T, x \rangle$, onde T é uma MT e $x$ uma string
+\begin{enumerate}
+	\item [1.] Simule M sobre $w$. Se pára e rejeita, \textit{rejeite}. se aceita, proceda os estágio 2
+	\item [2.] Simule T sobre $x$. Se aceita, \textit{aceite} (note: $L_P$ não é trivial, então $\langle T \rangle \in L_P$ tem que existir.)
+\end{enumerate}
+  \item Use $M_P$ para determinar se $\langle M' \rangle \in L_P$. Se aceita, \textit{aceite}. Caso contrário, rejeite.''
+\end{enumerate}
+\end{frame}
+
+\begin{frame} \frametitle{ Teorema de Rice }
+A MT $M'$ simula T se M aceita $w$. Logo, $L(M')$ é igual a $L(T)$ se M aceita $w$ e é igual a 0, em caso contrário. Portanto, $\langle M, w \rangle \in P$ sse M aceita $w$.
+
+Visto que $A_{MT}$ não é decidível, esta máquina não pode existir e nossa hipótese que $L_P$ é decidível deve ser incorreta. $\boxempty$
+\end{frame}
+
+\section{ Reduções via Histórias de Computação }
+
+\begin{frame} \frametitle{ Reduções via Histórias de Computação }
+\begin{center}
+\begin{tabular}{|p{9.7cm}|}
+\hline
+\textbf{Definição:} \textbf{História de computação} é uma seqüência de configurações, $C_1$, $C_2$ ,... , $C_l$, onde $C_1$ é a configuração inicial de M sobre w, $C_l$ é uma configuração de aceitação ou de rejeição de M, e cada $C_i$ segue $C_{i-1}$ conforme as regras de M.\\
+\hline
+\end{tabular}
+\end{center}
+
+\end{frame}
+
+\begin{frame} \frametitle{ Autômato linearmente limitado }
+\begin{center}
+\begin{tabular}{|p{9.7cm}|}
+\hline
+\textbf{Definição:} Um \textbf{autômato linearmente limitado} é um tipo restrito de máquina de Tu\-ri\-ng na qual à cabeça de leitura-escrita não é permitido mover-se para fora da parte da fita contendo a entrada.\\
+\hline
+\end{tabular}
+\end{center}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=.9\textwidth]{all.eps}
+\end{figure}
+
+\end{frame}
+
+\begin{frame} \frametitle{ Autômato linearmente limitado }
+\begin{center}
+\begin{tabular}{|p{9.7cm}|}
+\hline
+\textbf{Lema 5.8:} Seja M um ALL com $q$ estados e $g$ símbolos no alfabeto de fita. Existem exatamente $qng^n$ configurações distintas distintas de M para uma fita de comprimente $n$.\\
+\hline
+\end{tabular}
+\end{center}
+
+\textbf{Prova:} M tem $q$ estados. O comprimento da sua fita é $n$, portanto, a cabeça pode estar em uma das $n$ posições e $g^n$ cadeias possíveis de símbolos de fita aparecem sobre a fita. O produto dessas três quantidades é o número total de configurações diferentes de M com uma fita de comprimento $n$. $\boxempty$
+
+\end{frame}
+
+\begin{frame} \frametitle{ Autômato linearmente limitado }
+\begin{center}
+\begin{tabular}{|p{9.7cm}|}
+\hline
+\textbf{Teorema 5.9:}
+$$A_{ALL} = \{ \langle M,w \rangle | \textrm{M é um ALL que aceita a cadeia }w \}$$ é decidível.\\
+\hline
+\end{tabular}
+\end{center}
+
+\textbf{Prova:} O algoritmo que decide $A_{ALL}$ é como segue.
+
+L = ``Sobre a entrada $\langle M, w \rangle$, onde M é um ALL e w é uma cadeia:
+\begin{enumerate}
+	\item Simule M sobre w por $qng^n$ passos ou até que ela pare.
+	\item Se M parou, \textit{aceite} se ela aceitou e \textit{rejeite} se ela rejeitou. Se ela
+não parou, \textit{rejeite}.''
+
+\end{enumerate}
+\end{frame}
+
+\begin{frame} \frametitle{ Autômato linearmente limitado }
+\begin{center}
+\begin{tabular}{|p{9.7cm}|}
+\hline
+\textbf{Teorema 5.9:}
+$$A_{ALL} = \{ \langle M,w \rangle | \textrm{M é um ALL que aceita a cadeia }w \}$$ é decidível.\\
+\hline
+\end{tabular}
+\end{center}
+ 
+Se M sobre w não parou dentro de $qng^n$ passos, ela tem que estar repetindo
+uma configuração conforme o Lema 5.8 e, consequentemente, estar em loop. É
+por isso que nosso algoritmo rejeita nessa instância. $\boxempty$
+
+\end{frame}
+
+
+\begin{frame} \frametitle{ Autômato linearmente limitado }
+\begin{center}
+\begin{tabular}{|p{9.7cm}|}
+\hline
+\textbf{Teorema 5.10:}
+$$V_{ALL} = \{ \langle M,w \rangle | \textrm{M é um ALL onde }L(M) = \oslash \}$$ é indecidível.\\
+\hline
+\end{tabular}
+\end{center}
+
+\textbf{Prova:} Construímos um ALL B para aceitar uma entrada $x$ se $x$ é uma história de computação de aceitação
+para $M$ sobre $w$. Assumimos que a história de computação de aceitação é apresentada como uma única cadeia,
+com as configurações separadas umas das outras pelo símbolo $\#$ como a figura 5.11.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=.8\textwidth]{all1.eps}
+\end{figure}
+\end{frame}
+
+
+\begin{frame} \frametitle{ Autômato linearmente limitado }
+\begin{center}
+\begin{tabular}{|p{9.7cm}|}
+\hline
+\textbf{Teorema 5.10:}
+$$V_{ALL} = \{ \langle M,w \rangle | \textrm{M é um ALL onde }L(M) = \oslash \}$$ é indecidível.\\
+\hline
+\end{tabular}
+\end{center}
+ \textbf{Prova:} O ALL B, então obtem a entrada x e verifica se é uma história de computação de aceitação,o qual deve satisfazer as três condições:
+ 
+\begin{enumerate}
+\item $C_1$ é a configuração inicial para $M$ sobre $w$.
+\item Cada $C_{i+1}$ segue legitimamente de $C_i$.
+\item $C_l$ é uma configuração de aceitação para $M$.
+\end{enumerate} 
+
+Obs: Montamos o ALL B para alimentar o decisor de $V_{ALL}$ que pressupomos existir
+\end{frame}
+
+
+\begin{frame} \frametitle{ Autômato linearmente limitado }
+\begin{center}
+\begin{tabular}{|p{9.7cm}|}
+\hline
+\textbf{Teorema 5.10:}
+$$V_{ALL} = \{ \langle M,w \rangle | \textrm{M é um ALL onde }L(M) = \oslash \}$$ é indecidível.\\
+\hline
+\end{tabular}
+\end{center}
+\textbf{Prova:} Agora estamos prontos para enunciar a redução de $A_{MT}$ para $V_{ALL}$.
+Suponha que MT R decide $V_{ALL}$. Construa MT S que decide $A_{MT}$.
+\end{frame}
+
+\begin{frame} \frametitle{ Autômato linearmente limitado }
+\begin{center}
+\begin{tabular}{|p{9.7cm}|}
+\hline
+\textbf{Teorema 5.10:}
+$$V_{ALL} = \{ \langle M,w \rangle | \textrm{M é um ALL onde }L(M) = \oslash \}$$ é indecidível.\\
+\hline
+\end{tabular}
+\end{center}
+
+S = ``Sobre a entrada $\langle M, w \rangle$, onde M é uma MT e w é uma cadeia:
+\begin{enumerate}
+	\item  Construa o ALL B a partir de $M$ e $w$ conforme descrito.
+	\item  Rode R sobre a entrada $\langle B \rangle$.
+	\item  Se R rejeita, aceite; se R aceita, rejeite.''
+\end{enumerate} 
+\end{frame}
+
+\begin{frame} \frametitle{ Autômato linearmente limitado }
+
+Se R aceita $\langle B \rangle$, então $L(B) = \oslash$. Então, $M$ não tem nenhuma história de computação de aceitação sobre $w$ e $M$ não aceita $w$. Conseqüentemente, S rejeita $\langle M, w \rangle$. Similarmente, se R rejeita $\langle B \rangle$, a linguagem de $B$ é não vazia. A MT B aceita uma história de computação de aceitação para $M$ sobre $w$. Portanto, M deve aceitar $w$. Como conseqüência, S aceita $\langle M, w \rangle$.
+
+$\boxempty$
+\end{frame}
+
+
+\begin{frame} \frametitle{ Autômato linearmente limitado }
+\begin{figure}[ht]
+\centering
+\includegraphics[width=.9\textwidth]{all2.eps}
+\end{figure}
+
+\end{frame}
+
+\section{ Problemas indecidíveis sobre GLCs }
+
+\begin{frame} \frametitle{ Problemas indecidíveis sobre GLCs }
+\begin{center}
+\begin{tabular}{|p{9.7cm}|}
+\hline
+\textbf{Teorema 5.10:}
+$$TODAS_{GLC} = \{ \langle G \rangle | \textrm{G é uma GLC e }L(G) = \Sigma^* \}$$ é indecidível.\\
+\hline
+\end{tabular}
+\end{center}
+
+\textbf{Prova:} Para uma MT M e uma entrada $w$, construimos uma GLC G para gerar todas as strings que não são histórias de computação de aceitação para M sobre $w$.
+\newline
+
+Isto é, G gera todas as strings se e somente se M não aceita $w$.
+\newline
+
+Se $TODAS_{GLC}$ fosse decidível então $A_{MT}$ também seria.
+
+\end{frame}
+
+\begin{frame} \frametitle{ Problemas indecidíveis sobre GLCs }
+\begin{center}
+\begin{tabular}{|p{9.7cm}|}
+\hline
+\textbf{Teorema 5.10:}
+$$TODAS_{GLC} = \{ \langle G \rangle | \textrm{G é uma GLC e }L(G) = \Sigma^* \}$$ é indecidível.\\
+\hline
+\end{tabular}
+\end{center}
+
+\textbf{Prova:} Assuma que $TODAS_{GLC}$ é decidível. Construímos uma Autômato de Pilha $D$ que aceita a string $\#C_1\#C_2^\mathcal{R}\#C_3\#C_4^\mathcal{R}\# ... \#C_l\#$, tal que $\#C_1\#C_2\#C_3\#C_4\# ... \#C_l\#$ não represente uma história de computação de aceitação de $M$ sobre $w$.
+\end{frame}
+
+\begin{frame} \frametitle{ Problemas indecidíveis sobre GLCs }
+\begin{center}
+\begin{tabular}{|p{9.7cm}|}
+\hline
+\textbf{Teorema 5.10:}
+$$TODAS_{GLC} = \{ \langle G \rangle | \textrm{G é uma GLC e }L(G) = \Sigma^* \}$$ é indecidível.\\
+\hline
+\end{tabular}
+\end{center}
+
+D = ``Sobre a entrada $\#C_1\#C_2^\mathcal{R}\#C_3\#C_4^\mathcal{R}\# ... \#C_l\#$:
+\begin{enumerate}
+	\item  Se $C_1$ não é o estado inicial de $M$, então \textit{aceite}
+	\item  Se $C_l$ não é o estado de aceitação de $M$, então \textit{aceite}
+	\item  Se $C_i$ não produz $C_{i+1}$, então \textit{aceite}''
+\end{enumerate} 
+
+No terceiro passo, $D$ usa a pilha efetivamente. 
+\end{frame}
+
+\begin{frame} \frametitle{ Problemas indecidíveis sobre GLCs }
+\begin{center}
+\begin{tabular}{|p{9.7cm}|}
+\hline
+\textbf{Teorema 5.10:}
+$$TODAS_{GLC} = \{ \langle G \rangle | \textrm{G é uma GLC e }L(G) = \Sigma^* \}$$ é indecidível.\\
+\hline
+\end{tabular}
+\end{center}
+
+Note que :
+
+\begin{itemize}
+	\item $L(D) = \Sigma^*$  $\Leftrightarrow$ $M$ não aceita $w$, e 
+	\item $L(D) \neq \Sigma^*$  $\Leftrightarrow$ $M$ aceita $w$ 
+\end{itemize} 
+
+$\boxempty$
+\end{frame}
+
+
+\end{document}
+

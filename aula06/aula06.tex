@@ -1,0 +1,879 @@
+\documentclass{beamer}
+\usepackage[brazil]{babel}
+\usepackage[latin1]{inputenc}
+\usepackage[all]{xy}
+\usepackage{stmaryrd}
+\usepackage{verbatim}
+\usepackage{graphicx}
+\usepackage{indentfirst}
+\usepackage{float}
+\usepackage{psfrag}
+
+\usepackage{stmaryrd}
+
+\mode<presentation>{
+  
+  \usepackage{beamerthemesplit} 
+  %\usetheme[secheader]{Madrid}
+  %\usetheme{Antibes}
+  \usetheme{Warsaw}
+  %\usecolortheme{seagull}
+  %\usecolortheme{lily}
+  \usepackage{pgf,pgfarrows,pgfnodes,pgfautomata,pgfheaps,pgfshade}
+  \beamertemplatetransparentcovereddynamic
+  \beamertemplateballitem
+  \beamertemplatefootpagenumber
+  \setbeamertemplate{navigation symbols}{} 
+  %\useoutertheme{infolines} 
+  %\setbeamercolor{title}{fg=red!80!black}
+  %\setbeamercolor{normal text}{fg=red!80}
+}
+%
+\def\red{\color[rgb]{0.7,0,0}}
+\def\green{\color[rgb]{0,.8,0}}
+\def\darkgreen{\color[rgb]{0.1,0.4,0.0}}
+\let\dgreen\darkgreen
+\def\blue{\color[rgb]{0,0,.8}}
+\def\yellow{\color[rgb]{1,1,0}}
+\def\black{\color[rgb]{0,0,0}}
+
+\def\pink{\color[rgb]{1,0,1}}
+\def\brown{\color[rgb]{.5,.1,.3}}
+\def\lilaz{\color[rgb]{.5,0,.5}}
+\def\hmmm{\color[rgb]{.3,.1,.5}}
+\def\magenta{\color[rgb]{.6,.05,.05}}
+
+\title{Teoria da Computação \\ {Redutibilidade}}
+\author{{Leonardo~Takuno}\\
+\texttt{\{leonardo.takuno@gmail.com\}}}
+\date{{\dgreen Centro Universitário Senac}}
+
+
+\begin{document}
+%\maketitle				% OPTIONAL
+
+\pgfdeclareimage[height=1.0cm]{logo}{logo.eps}
+\logo{\pgfuseimage{logo}}
+
+\frame{\titlepage}
+
+\frame{
+\frametitle{Sumário}
+\tableofcontents
+}
+
+\AtBeginSection[]
+{
+ \begin{frame}
+  \frametitle{Sumário}
+  \tableofcontents[currentsection]
+ \end{frame}
+}
+
+\section{PCP}
+\begin{frame} \frametitle{  PCP }
+\begin{itemize}
+	\item Dado um conjunto de ``dominós'':
+	
+	$\left\{ \biggl[ \dfrac{b}{ca} \biggr] , \biggl[ \dfrac{a}{ab} \biggr] , \biggl[ \dfrac{ca}{a} \biggr], \biggl[  \dfrac{abc}{c} \biggr]  \right\}$
+
+	\item Emparelhamento:
+
+	$ \biggl[ \dfrac{a}{ab} \biggr]$ $\biggl[ \dfrac{b}{ca} \biggr]$ $\biggl[ \dfrac{ca}{a} \biggr]$ $\biggl[ \dfrac{a}{ab} \biggr]$ $\biggl[ \dfrac{abc}{c} \biggr]$
+
+	\item Para algumas coleções de dominós, encontrar um emparelhamento pode não ser possível:
+	
+	$\left\{ \biggl[ \dfrac{abc}{ab} \biggr] , \biggl[ \dfrac{ca}{a} \biggr] ,\biggl[ \dfrac{acc}{ba} \biggr] \right\}$
+\end{itemize}
+\end{frame}
+
+
+\begin{frame} \frametitle{  PCP e PCPM }
+\begin{itemize}
+   \item Uma instância do PCP é uma coleção P de dominós:
+   
+  $ P = \left\{\biggl[ \dfrac{t_1}{b_1} \biggr], \biggl[ \dfrac{t_2}{b_2} \biggr], ..., \biggl[ \dfrac{t_k}{b_k} \biggr] \right\}$
+  
+  e um \textbf{emparelhamento} é uma seqüência $i_1, i_2, ..., i_l$ 
+  
+  onde $t_{i_1}t_{i_2} ... t_{i_l}$ = $b_{i_1}b_{i_2} ... b_{i_l}$.  
+  
+\begin{itemize}
+	\item $ PCP = \{ \langle P \rangle |$ P é uma instância do PCP com um emparelhamento $\}$
+
+  \item $ PCPM = \{ \langle P \rangle |$ P é uma instância do PCP com um emparelhamento que começa com o primeiro dominó $\}$
+
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame} \frametitle{  PCP é indecidível }
+
+\textbf{Teorema 5.15:} PCP é indecidível 
+
+\begin{itemize}
+	\item A prova envolve muitos detalhes técnicos, mas a idéia é simples.
+	\item Vamos reduzir $A_{MT}$ para PCP via histórias de computação.
+	\item Isto é, para uma MT M e $w$ construiremos uma instância do PCP tal que P tem uma solução se, e somente se, M aceita $w$.
+\end{itemize}
+
+\end{frame}
+
+\begin{frame} \frametitle{  PCP é indecidível }
+
+\textbf{Teorema 5.15:} PCP é indecidível 
+
+\textbf{Prova:} Supomos que a MT $R$ decide o PCP e construímos S que decide $A_{MT}$. 
+
+Seja $M = (Q, \Sigma, \Gamma, \delta, q_0, q_{accept}, q_{reject})$
+
+Para isso, S primeiro constrói uma instância $P'$ de PCPM.
+
+Seja $P'$ uma coleção de dominós.
+
+\begin{enumerate}
+	\item[(1)] Primeiro dominó em $P'$
+	
+	$\biggl[ \dfrac{\#}{\#q_0w_1w_2 ... w_n\#} \biggr]$
+	
+	\item[(2)] Para todo $a, b \in \Gamma$ e todo $q, r \in Q$ 
+	
+	se $\delta(q,a) = (r,b,D)$, $\biggl[ \dfrac{qa}{br} \biggr] \in P'$
+	
+	
+\end{enumerate}
+\end{frame}
+
+
+\begin{frame} \frametitle{  PCP é indecidível }
+
+\textbf{Teorema 5.15:} PCP é indecidível 
+
+\textbf{Prova: (Continuação)} 
+
+\begin{enumerate}
+	\item[(3)] Para todo $a, b, c \in \Gamma$ e todo $q, r \in Q$ 
+	
+	se $\delta(q,a) = (r,b,E)$, $\biggl[ \dfrac{cqa}{rcb} \biggr] \in P'$
+
+	\item[(4)] Para todo $a \in \Gamma$ 
+	
+	$\biggl[ \dfrac{a}{a} \biggr] \in P'$
+\end{enumerate}
+
+\end{frame}
+
+\begin{frame} \frametitle{  PCP é indecidível }
+
+\textbf{Teorema 5.15:} PCP é indecidível 
+
+\textbf{Prova: (Continuação)} 
+
+\begin{enumerate}
+	\item [(5)] Vamos permitir copiar o símbolo $\#$ que marca a separação das configurações e também possibilitar a inserção de um espaço em branco $\sqcup$ no final da configuração:
+	
+	$\biggl[ \dfrac{\#}{\#} \biggr]$  e $\biggl[ \dfrac{\#}{\sqcup\#} \biggr] \in P'$
+	
+	\item[(6)] Para todo $a \in \Gamma$ 
+	
+	$\biggl[ \dfrac{aq_{accept}}{q_{accept}} \biggr]$ e $\biggl[ \dfrac{q_{accept}a}{q_{accept}} \biggr]\in P'$
+	
+	\item[(7)] Finalmente, adicionamos o nó
+	
+	$\biggl[ \dfrac{q_{accept}\#\#}{\#} \biggr]$
+	
+	e completamos o emparelhamento.
+\end{enumerate}
+\end{frame}
+
+
+\begin{frame} \frametitle{  PCP é indecidível }
+\begin{itemize}
+	\item Seja $\Gamma = \{0,1,2,\sqcup\}$ e $w=0100$ e que o estado inicial de $M$ seja $q_0$
+	\item A configuração inicial é $q_00100$
+	\item Agora suponha
+	$$\delta(q_0, 0) = (q_7, 2, D)$$
+	
+	\item \textbf{Parte 1:} Colocar o primeiro dominó.
+	
+$$\biggl[ \dfrac{\#}{\#q_00100\#} \biggr]$$	
+	
+\end{itemize}
+\end{frame}
+
+\begin{frame} \frametitle{  PCP é indecidível }
+$$\biggl[ \dfrac{\#}{\#q_00100\#} \biggr]$$	
+\begin{itemize}
+	\item Para ocorrer o emparelhamento nós queremos um dominó que tenha $q_00$ na parte superior do dominó. a \textbf{parte 2} coloca o dominó:
+	
+	$$\biggl[ \dfrac{q_00}{2q_7} \biggr]$$
+	
+	pois 	$\delta(q_0, 0) = (q_7, 2, D)$	
+\end{itemize}
+\end{frame}
+
+\begin{frame} \frametitle{  PCP é indecidível }
+\begin{itemize}
+	\item O emparelhamento se apresenta da seguinte maneira:
+	
+	$$\biggl[ \dfrac{\#}{\#q_00100\#} \biggr] \biggl[ \dfrac{q_00}{2q_7} \biggr] $$
+	
+	\item A \textbf{parte 4} coloca os dominós
+	 
+	 $$\biggl[ \dfrac{0}{0} \biggr] , \biggl[ \dfrac{1}{1} \biggr], \biggl[ \dfrac{2}{2} \biggr], \biggl[ \dfrac{\sqcup}{\sqcup} \biggr]$$
+	
+\end{itemize}
+\end{frame}
+
+\begin{frame} \frametitle{  PCP é indecidível }
+\begin{itemize}
+	\item O emparelhamento junto com a parte 5 apresenta-se:
+	$$\biggl[ \dfrac{\#}{\#q_00100\#} \biggr] \biggl[ \dfrac{q_00}{2q_7} \biggr] \biggl[ \dfrac{1}{1} \biggr]\biggl[ \dfrac{0}{0} \biggr]\biggl[ \dfrac{0}{0} \biggr] \biggl[ \dfrac{\#}{\#} \biggr] $$
+
+\end{itemize}
+\end{frame}
+
+\begin{frame} \frametitle{  PCP é indecidível }
+\begin{itemize}
+	\item Suponha que:
+		$$\delta(q_7, 1) = (q_5, 0, D)$$	
+		
+		Então temos o dominó
+		
+		$$\biggl[ \dfrac{q_71}{0q_5} \biggr]$$
+	\item O último emparelhamento se estende para
+	
+		
+	$$\biggl[ \dfrac{\#}{\#q_00100\#} \biggr] \biggl[ \dfrac{q_00}{2q_7} \biggr] \biggl[ \dfrac{1}{1} \biggr]\biggl[ \dfrac{0}{0} \biggr]\biggl[ \dfrac{0}{0} \biggr] \biggl[ \dfrac{\#}{\#} \biggr] \biggl[ \dfrac{2}{2} \biggr] \biggl[ \dfrac{q_71}{0q_5} \biggr] \biggl[ \dfrac{0}{0} \biggr] \biggl[ \dfrac{0}{0} \biggr] \biggl[ \dfrac{\#}{\#} \biggr] $$
+
+	
+\end{itemize}
+\end{frame}
+
+\begin{frame} \frametitle{  PCP é indecidível }
+\begin{itemize}
+	\item Suponha que:
+		$$\delta(q_5, 0) = (q_9, 2, E)$$	
+		
+		Então temos os dominós
+		
+		$$\biggl[ \dfrac{0q_50}{q_902} \biggr], \biggl[ \dfrac{1q_50}{q_912} \biggr], \biggl[ \dfrac{2q_50}{q_922} \biggr], \biggl[ \dfrac{\sqcup q_50}{q_9\sqcup2} \biggr]$$
+	\item O último emparelhamento se estende para
+	
+		
+	$$\biggl[ \dfrac{\#}{\#q_00100\#} \biggr] \biggl[ \dfrac{q_00}{2q_7} \biggr] \biggl[ \dfrac{1}{1} \biggr]\biggl[ \dfrac{0}{0} \biggr]\biggl[ \dfrac{0}{0} \biggr] \biggl[ \dfrac{\#}{\#} \biggr] \biggl[ \dfrac{2}{2} \biggr] \biggl[ \dfrac{q_71}{0q_5} \biggr] \biggl[ \dfrac{0}{0} \biggr] \biggl[ \dfrac{0}{0} \biggr] \biggl[ \dfrac{\#}{\#} \biggr] $$
+	
+	
+	$$\biggl[ \dfrac{\#}{\#} \biggr] \biggl[ \dfrac{2}{2} \biggr] \biggl[ \dfrac{0q_50}{q_902} \biggr] \biggl[ \dfrac{0}{0} \biggr] \biggl[ \dfrac{\#}{\#} \biggr]  $$
+
+	
+\end{itemize}
+\end{frame}
+
+\begin{frame} \frametitle{  PCP é indecidível }
+
+\begin{itemize}
+	\item Para construir um emparelhamento nós temos que simular $M$ sobre a entrada $w$.
+	\item Entretanto, há um problema
+	\item A string na parte superior está sempre ``atrás'' da parte inferior!
+\end{itemize}
+\end{frame}
+
+\begin{frame} \frametitle{  PCP é indecidível }
+\begin{itemize}
+	\item O emparelhamento pode ser completado utilizando os três dominós dos itens 6 e 7. Assim, inserimos ``pseudopassos'' da máquina de Turing depois que ela parou, onde a cabeça ``consome'' os símbolos adjacentes até que neste ponto não reste mais nenhum.\end{itemize}
+\end{frame}
+
+\begin{frame} \frametitle{  PCP é indecidível }
+
+ \begin{enumerate}
+	
+	\item[(6)] Para todo $a \in \Gamma$ 
+	
+	$\biggl[ \dfrac{aq_{accept}}{q_{accept}} \biggr]$ e $\biggl[ \dfrac{q_{accept}a}{q_{accept}} \biggr]\in P'$
+	
+	
+	\item[(7)] Adicionamos o nó
+	
+	$\biggl[ \dfrac{q_{accept}\#\#}{\#} \biggr]$
+
+\end{enumerate}
+
+\begin{itemize}
+	\item Quando a $M$ alcança o estado de aceitação as partes 6 e 7 permitem completar o emparelhamento.
+	\item Entretanto, se $M$ rejeita $w$ ou entrar em loop. Não ocorrerá emparelhamento. 
+\end{itemize}
+\end{frame}
+
+
+\begin{frame} \frametitle{  PCP é indecidível }
+
+\begin{block}{Teorema}
+PCPM é indecidível
+\end{block}
+
+\begin{itemize}
+	\item Assuma que PCPM seja decidível. Então temos um decisor $R$ para PCPM.
+	
+\end{itemize}
+\end{frame}
+
+
+\begin{frame} \frametitle{  PCP é indecidível }
+
+Construímos a MT S para decidir $A_{MT}$ da seguinte forma:
+
+		S = ``Sobre a entrada $\langle M, w \rangle$, uma codificação de uma MT M e uma cadeia $w$:
+\begin{enumerate}
+	\item Construa $P'$ como descrito em 7 partes.
+	\item Execute R sobre $P'$
+	\item Se $R$ aceita, \textit{aceite}; 
+	\item Se $R$ rejeita, \textit{rejeite} '' 
+\end{enumerate}
+
+Então S é um decisor para $A_{MT}$. Que é uma contradição para o fato de que $A_{MT}$ é indecidível.
+\end{frame}
+
+
+\begin{frame} \frametitle{  PCP é indecidível }
+\begin{itemize}
+	\item Concluimos a construção de $P'$. Lembre-se que $P'$ é uma instância de PCPM.
+	\item Reduzimos $A_{MT}$ para PCPM por encontrar um emparelhamento que simula a computação de M sobre $w$.
+	\item Como PCPM é uma instância de PCP, é possível encontrar uma maneira de converter $P'$ em $P$, uma instância de PCP que simula $M$ sobre $w$.
+	
+\end{itemize}
+\end{frame}
+
+\begin{frame} \frametitle{  PCPM para PCP }
+\begin{itemize}
+	\item Notação:
+\begin{equation*}
+\begin{matrix}
+	\star u &= \ast u_1 \ast u_2 \ast u_3 \ast  \cdots \ast u_n \\ 
+	u \star &= u_1 \ast u_2 \ast u_3 \ast  \cdots \ast u_n \ast \\
+	\star u \star  &=  \ast u_1 \ast u_2 \ast u_3 \ast  \cdots \ast u_n \ast
+\end{matrix} 
+\end{equation*}	
+
+  PCPM com 	
+	$$ \left \{ \biggl[ \dfrac{t_1}{b_1} \biggr] , \biggl[ \dfrac{t_2}{b_2} \biggr], \biggl[ \dfrac{t_3}{b_3} \biggr], ... ,\biggl[ \dfrac{t_k}{b_k} \biggr] \right \} $$	
+	
+	é equivalente ao PCP com 
+	
+  PCPM com 	
+	$$ \left \{ \biggl[ \dfrac{\star t_1}{\star b_1 \star} \biggr] , \biggl[ \dfrac{\star t_2}{b_2 \star} \biggr], \biggl[ \dfrac{\star t_3}{b_3 \star} \biggr], ... ,\biggl[ \dfrac{\star t_k}{b_k \star} \biggr],\biggl[ \dfrac{\star \diamondsuit}{\diamondsuit} \biggr] \right \} $$	
+	 
+\end{itemize}
+\end{frame}
+
+\begin{frame} \frametitle{  PCP é indecidível }
+
+\begin{block}{Teorema}
+PCP é indecidível
+\end{block}
+
+\begin{itemize}
+	\item Assuma que PCP seja decidível. Então temos um decisor $R$ para PCP.
+	
+\end{itemize}
+\end{frame}
+
+
+\begin{frame} \frametitle{  PCP é indecidível }
+
+Construímos a MT S da seguinte forma:
+
+		S = ``Sobre a entrada $\langle P' \rangle$:
+\begin{enumerate}
+	\item Construa $P$ como descrito.
+	\item Execute R sobre $P$
+	\item Se $R$ aceita, \textit{aceite}; 
+	\item Se $R$ rejeita, \textit{rejeite} '' 
+\end{enumerate}
+
+Então S é um decisor para PCP. Que é uma contradição para o fato de que PCPM é indecidível.
+\end{frame}
+
+\section{Funções computáveis}
+
+\begin{frame} \frametitle{  Funções computáveis }
+
+\begin{center}
+\begin{tabular}{|p{9.0cm}|}
+\hline
+\textbf{Definição 5.17: } Uma função $f: \Sigma^* \rightarrow \Sigma^*$ é uma \textbf{função computável} se alguma máquina de Turing $M$, sobre toda entrada $w$, pára com exatamente $f(w)$ sobre sua fita.\\
+\hline
+\end{tabular}
+\end{center}
+
+\end{frame}
+
+
+\begin{frame} \frametitle{  Funções computáveis }
+\begin{itemize}
+	\item Exemplos de funções computáveis
+	
+\begin{itemize}
+	\item $f(\langle m,n \rangle ) = m+n$
+	\item Seja $A$ uma matriz $n \times n$ então a função
+	$$f(\langle A \rangle) = \langle A^2 \rangle$$
+	é computável.
+\end{itemize}
+\end{itemize}
+
+\end{frame}
+
+
+\section{Redutibilidade por Mapeamento}
+\begin{frame} \frametitle{  Redutibilidade }
+
+Suponha que nós temos dois problema A e B. Rigorosamente, se a solução de B pode ser usado para resolver o problema de A então dizemos que:
+\begin{block}{}
+\begin{center}
+A é redutível a B.
+\end{center}
+\end{block}
+\end{frame}
+
+\begin{frame} \frametitle{  Redutibilidade }
+\begin{itemize}
+	\item O problema de descobrir como sair do ponto A e chegar no ponto B em São Paulo pode ser reduzido a tarefa de encontrar um mapa para a cidade de São Paulo. 
+\end{itemize}
+\end{frame}
+
+\begin{frame} \frametitle{  Redutibilidade }
+\begin{itemize}
+	\item O problema de atravessar um rio pode ser reduzido ao encontrar um barco. 
+\end{itemize}
+\end{frame}
+
+\begin{frame} \frametitle{  Redutibilidade }
+\begin{itemize}
+	\item O problema de saciar a sede pode ser reduzido ao problema de encontrar água limpa. 
+\end{itemize}
+\end{frame}
+
+\begin{frame} \frametitle{  Redutibilidade }
+\begin{itemize}
+	\item O problema de resolver uma equação quadrática pode ser reduzido ao problema de fazer amigos matemáticos. 
+\end{itemize}
+\end{frame}
+
+\begin{frame} \frametitle{  Redutibilidade por Mapeamento }
+\begin{center}
+\begin{tabular}{|p{9.0cm}|}
+\hline
+\textbf{Definição 5.20: } A linguagem A é \textbf{redutível por mapeamento} à linguagem $B$, escrito $A \leq_m B$, se existe uma função computável $f: \Sigma^* \rightarrow \Sigma^*$, onde para toda $w$,
+$$w \in A \Longleftrightarrow f(w) \in B$$
+
+A função f é denominada a \textbf{redução} de A para B.
+
+\\
+\hline
+\end{tabular}
+\end{center}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=.4\textwidth]{redutibilidade.eps}
+\end{figure}
+\end{frame}
+
+\begin{frame} \frametitle{  Redutibilidade por Mapeamento }
+\begin{center}
+\begin{tabular}{|p{9.0cm}|}
+\hline
+\textbf{Teorema 5.22: } Se $A \leq_m B$ e B é decidível, então A é decidível.\\
+\hline
+\end{tabular}
+\end{center}
+
+\textbf{Prova:} Fazemos $M$ ser o decisor para $B$ e $f$ a redução de $A$ para $B$. Descrevemos um decisor $N$ para $A$ da seguinte forma.
+
+
+$N$ = ``Sobre a entrada $w$:
+\begin{enumerate}
+	\item Compute $f(w)$.
+	\item Rode $M$ sobre a entrada $f(w)$ e dê como o que $M$ der como saída.
+\end{enumerate}
+Claramente, se  $w \in A$, então $f(w) \in B$, porque $f$ é uma redução de $A$ para $B$. Portanto, $M$ aceita $f(w)$ sempre que $w \in A$.
+
+\end{frame}
+
+
+\begin{frame} \frametitle{  Redutibilidade por Mapeamento }
+
+\begin{center}
+\begin{tabular}{|p{9.0cm}|}
+\hline
+\textbf{Corolário 5.23:} Se $A \leq_m B$ e A é indecidível, então B é indecidível.\\
+\hline
+\end{tabular}
+\end{center}
+
+\textbf{Prova:} Assuma que $B$ é decidível, seja M um decisor para $B$ e seja $f$ uma redução de $A$ para $B$, então podemos construir um decisor $N$ para $A$ da seguinte forma.
+
+
+$N$ = ``Sobre a entrada $w$:
+\begin{enumerate}
+	\item Compute $f(w)$.
+	\item Rode $M$ sobre a entrada $f(w)$ e dê como o que $M$ der como saída.
+\end{enumerate}
+Claramente, como $A$ é indecidível esta máquina não pode existir, portanto, nossa suposição de que $B$ é decidível deve estar incorreta.
+\end{frame}
+
+
+\begin{frame} \frametitle{ Exemplo $A_{MT} \leq_m PARA_{MT}$}
+\begin{center}
+\begin{tabular}{|p{10.0cm}|}
+\hline
+Seja \\
+
+\hspace{0.5cm} $PARA_{MT}$ = $\{ \langle M, w \rangle | M$ é uma MT para sobre $w$ $\}$ \\\\
+\hline
+\end{tabular}
+\end{center}
+
+
+
+Para mostrar que 
+$$A_{MT} \leq_m PARA_{MT}$$
+
+temos que encontrar uma função computável tal que:
+
+$$f(\langle M,w \rangle) = \langle M',w' \rangle$$
+
+tal que :
+
+$$\langle M,w \rangle \in A_{MT}  \mbox{ se e somente se } \langle M' ,w' \rangle \in PARA_{MT}$$
+\end{frame}
+
+
+\begin{frame} \frametitle{ Exemplo $A_{MT} \leq_m PARA_{MT}$}
+Para construir a função computável $f$, construa uma MT F que computa a redução:
+
+F = ``Sobre a entrada $\langle M, w \rangle$:
+
+\begin{enumerate}
+\item Construa a seguinte máquina $M'$
+
+$M'$ = ``Sobre a entrada x:
+	\begin{enumerate}
+	\item Rode M sobre x
+	\item Se M aceitar, aceite.
+	\item Se M rejeitar, entrar em loop."
+	\end{enumerate}
+\item Dê como saída $\langle M', w \rangle$
+\end{enumerate}
+
+Observe que $\langle M', w \rangle$ sse $\langle M, w \rangle \in A_{MT}$ como requerido.
+\end{frame}
+
+\begin{frame} \frametitle{ Exemplo $A_{MT} \leq_m PARA_{MT}$}
+Para construir a função computável $f$, construa uma MT F que computa a redução:
+
+F = ``Sobre a entrada $\langle M, w \rangle$:
+
+\begin{enumerate}
+\item Construa a seguinte máquina $M'$
+
+$M'$ = ``Sobre a entrada x:
+	\begin{enumerate}
+	\item Rode M sobre x
+	\item Se M aceitar, aceite.
+	\item Se M rejeitar, entrar em loop."
+	\end{enumerate}
+\item Dê como saída $\langle M', w \rangle$
+\end{enumerate}
+
+Se a entrada fornecida para F não é um elemento de $A_{MT}$, assumimos que F mapeia para alguma string que não esteja em $PARA_{MT}$.
+\end{frame}
+
+\begin{frame} \frametitle{ Exemplo $A_{MT} \leq_m PARA_{MT}$}
+
+Vamos analisar por que isto funciona:
+
+\begin{itemize}
+\item $\langle M, w \rangle \in A_{MT} \rightarrow M$ aceita $w$ $\rightarrow M'$ aceita $w \rightarrow \langle M', w \rangle \in PARA_{MT}$ 
+
+\item $\langle M, w \rangle \notin A_{MT}$
+\begin{itemize}
+\item $M$ rejeita $w  \rightarrow M'$ entra em loop $ \rightarrow \langle M', w \rangle \notin PARA_{MT}$
+\item $M$ entra em loop sobre $w \rightarrow M'$ entra em loop $ \rightarrow \langle M', w \rangle \notin PARA_{MT}$ 
+\end{itemize}
+\end{itemize}
+
+Codificação incorreta de $\langle M, w \rangle$
+\begin{itemize}
+\item $\langle M, w \rangle \notin A_{MT}$
+\item Faça $f(\langle M, w \rangle) = \langle M, w \rangle \notin PARA_{MT}$
+\end{itemize}
+\end{frame}
+
+
+\begin{frame} \frametitle{  Exemplo: $A_{MT} \leq_m PCPM \leq_m PCP $ }
+Na prova da indecidibilidade do problema da correspondência de Post mostramos duas reduções por mapeamento:
+
+$$A_{MT} \leq_m PCPM$$
+
+$$PCPM \leq_m PCP$$
+
+Note que as reduções por mapeamento são transitivas.
+\end{frame}
+
+
+
+\begin{frame} \frametitle{  Exemplo: $V_{MT} \leq_m EQ_{MT}$ }
+\begin{center}
+\begin{tabular}{|p{9.7cm}|}
+\hline
+ A linguagem $$V_{MT} = \{ \langle M \rangle | \textrm{M é uma MT L(M) = }\oslash \}$$ é indecidível.\\
+\hline
+\end{tabular}
+\end{center}
+
+Vamos mostrar que 
+$$V_{MT} \leq_m EQ_{MT}$$
+
+Seja $M_1$ uma MT que rejeita todas as entradas. 
+
+Defina:
+
+$$f(\langle M \rangle) = \langle M,M_1 \rangle$$
+
+então teremos
+
+\begin{center}
+$L(M) = \oslash$ se e somente se $L(M) = L(M_1)$
+\end{center}
+\end{frame}
+
+
+\begin{frame} \frametitle{  Exemplo: $A_{MT} \leq_m \overline{V_{MT}}$ }
+Vamos mostrar que 
+$$A_{MT} \leq_m \overline{V_{MT}}$$
+
+Defina:
+
+$$f(\langle M,w \rangle) = \langle M_1 \rangle$$
+
+tal que 
+\begin{center}
+$M$ aceita $w$ se e somente se $L(M_1) \neq \oslash$
+\end{center}
+
+\end{frame}
+
+\begin{frame} \frametitle{   $A_{MT} \leq_m \overline{V_{MT}}$ }
+Para construir a função computável $f$, construa uma MT F que computa a redução:
+
+\begin{enumerate}
+	\item Sobre a entrada $\langle M,w\rangle$
+  \item Seja $M_1$ a máquina:
+\begin{enumerate}
+  \item    ``Sobre a entrada x
+  \item     se $x \neq w$ rejeite
+  \item     senão execute M sobre x
+  \item     se M aceita x, aceite''
+\end{enumerate}
+  \item Dê como saida $\langle M_1 \rangle$
+\end{enumerate}\end{frame}
+
+\begin{frame} \frametitle{   $A_{MT} \leq_m \overline{V_{MT}}$ }
+Vamos analisar por que isto funciona:
+
+\begin{itemize}
+\item $\langle M,w\rangle \in A_{MT} \rightarrow L(M_1) = \{w\} \rightarrow \langle M_1\rangle \notin V_{MT} \rightarrow \langle M_1\rangle \in \overline{V_{MT}}$
+\item $\langle M,w\rangle \notin A_{MT} \rightarrow L(M_1) = \oslash \rightarrow \langle M_1\rangle \in V_{MT} \rightarrow \langle M_1\rangle \notin \overline{V_{MT}}$
+\end{itemize}
+
+\end{frame}
+
+\begin{frame} \frametitle{   $A_{MT} \leq_m \overline{V_{MT}}$ }
+A redutibilidade anterior mostra que 
+\begin{itemize}
+	\item $\overline{V_{MT}}$ é indecidível
+\end{itemize}
+
+isto implica que 
+\begin{itemize}
+	\item $V_{MT}$ é indecidível
+\end{itemize}
+
+Conclusão:
+
+Para mostrar que uma linguagem B é indecidível.
+\begin{itemize}
+\item Encontre uma linguagem $A$ que foi provado ser indecidível.
+\item Encontre uma função de redução de $A$ para $B$ ou para $\overline{B}$
+\end{itemize}
+\end{frame}
+
+\begin{frame} \frametitle{  Redutibilidade por Mapeamento }
+\textbf{Observação:} Reduções de linguagens nem sempre existem. Isto é, nem sempre é possível especificar uma função computação que reduz uma linguagem na outra. 
+
+\vspace{1cm} 
+
+Ex: $A_{MT} \leq_m V_{MT}$
+
+\vspace{1cm} 
+Não é possível construir uma redução, como pede o exercício 5.5 do livro.
+
+\end{frame}
+
+\begin{frame} \frametitle{  Redutibilidade por Mapeamento }
+\begin{center}
+\begin{tabular}{|p{9.0cm}|}
+\hline
+\textbf{Teorema 5.28: } Se $A \leq_m B$ e B é Turing-reconhecível, então A é Turing-reconhecível.\\
+\hline
+\end{tabular}
+\end{center}
+\textbf{Prova:} Seja M um reconhecedor para B e $f$ é uma redução de A para B. A seguinte MT N reconhece A:
+
+N = ``Sobre a entrada $w$
+\begin{enumerate}
+	\item Compute $f(w)$
+	\item Execute M sobre $f(w)$ e dê como saída o que M apresentar.
+\end{enumerate}
+
+Claramente, se $w \in A$ então $f(w) \in B$ pois $f$ é uma redução. Assim $M$ aceita $f(w)$ quando $w \in A$.
+\end{frame}
+
+\begin{frame} \frametitle{  Redutibilidade por Mapeamento }
+\begin{center}
+\begin{tabular}{|p{9.0cm}|}
+\hline
+\textbf{Corolário 5.29: } Se $A \leq_m B$ e A não é Turing-reconhecível, então B não é Turing-reconhecível.\\
+\hline
+\end{tabular}
+\end{center}
+
+\textbf{Questão:}Qual linguagem estudada não é Turing-Reconhecível ?
+
+\textbf{Resposta:} $\overline{A_{MT}}$
+
+\end{frame}
+
+\begin{frame} \frametitle{  Redutibilidade por Mapeamento }
+\begin{center}
+\begin{tabular}{|p{9.0cm}|}
+\hline
+\textbf{Corolário 5.29: } Se $A \leq_m B$ e A não é Turing-reconhecível, então B não é Turing-reconhecível.\\
+\hline
+\end{tabular}
+\end{center}
+
+\begin{itemize}
+	\item A definição de redutibilidade por mapeamento implica que :
+	
+$${A \leq_m B \mbox{ significa o mesmo que } \overline{	A } \leq_m \overline{	B } }$$
+
+Para provar que B não é reconhecível, podemos mostrar que $A_{MT} \leq_m \overline{B}$
+	
+\end{itemize}
+
+\end{frame}
+
+\begin{frame} \frametitle{   }
+
+\begin{center}
+\begin{tabular}{|p{9.0cm}|}
+\hline
+\textbf{Teorema 5.30: } $EQ_{MT}$ não é nem Turing-reconhecível nem co-Turing-reconhecível. \\
+\hline
+\end{tabular}
+\end{center}
+\textbf{Prova:} Primeiro mostramos que $EQ_{MT}$ não é Turing-reconhecível. Fazemos isso mostrando que $A_{MT} \leq_m \overline{EQ_{MT}}$.
+A função redutora  $f$ funciona da seguinte forma.
+
+F = ``sobre a entrada $\langle M, w\rangle$ onde $M$ é uma MT e $w$, uma cadeia:
+\begin{enumerate}
+	\item Construa as seguintes máquinas $M_1$ e $M_2$
+	
+	$M_1$ = ``Sobre qualquer entrada:
+	
+\begin{enumerate}
+	\item[1.] Rejeite''
+\end{enumerate}
+
+	$M_2$ = ``Sobre qualquer entrada:
+	
+\begin{enumerate}
+	\item[1.] Rode $M$ sobre $w$. 
+	\item[2.] Se ela aceita, \textit{aceite}.''
+\end{enumerate}
+	
+	\item Dê como saída $\langle M_1, M_2 \rangle$''
+\end{enumerate}
+\end{frame}
+
+\begin{frame} \frametitle{ $EQ_{MT}$ não é Turing-reconhecível }
+$A_{MT} \leq_m \overline{EQ_{MT}}$.
+
+
+Vamos analisar por que isto funciona:
+
+\begin{itemize}
+\item $\langle M, w \rangle \in A_{MT} \rightarrow M$ aceita $w \rightarrow $ $L(M_2) = \Sigma^* \rightarrow$ $L(M_1) \neq L(M_2) \rightarrow$ $\langle M_1, M_2\rangle \in \overline{EQ_{MT}}$ 
+
+\item $\langle M, w \rangle \notin A_{MT} \rightarrow M$ não aceita $w \rightarrow $ $L(M_2) = \oslash \rightarrow$ $L(M_1)= L(M_2) \rightarrow$ $\langle M_1, M_2\rangle \notin \overline{EQ_{MT}}$ 
+
+\end{itemize}
+\end{frame}
+
+\begin{frame} \frametitle{ }
+
+\begin{center}
+\begin{tabular}{|p{9.0cm}|}
+\hline
+\textbf{Teorema 5.30: } $EQ_{MT}$ não é nem Turing-reconhecível nem co-Turing-reconhecível. \\
+\hline
+\end{tabular}
+\end{center}
+\textbf{Prova:} (continuação) Agora mostramos que $\overline{EQ_{MT}}$ não é Turing-reconhecível. Fazemos isso mostrando que $A_{MT} \leq_m EQ_{MT}$.
+A MT $G$ computa a função redutora $g$.
+
+G = ``sobre a entrada $\langle M, w\rangle$ onde $M$ é uma MT e $w$, uma cadeia: \vspace{-0.5cm}
+\begin{enumerate}
+	\item Construa as seguintes máquinas $M_1$ e $M_2$
+	
+	$M_1$ = ``Sobre qualquer entrada:
+	
+\begin{enumerate}
+	\item[1.] Aceite''
+\end{enumerate}
+
+	$M_2$ = ``Sobre qualquer entrada:
+	
+\begin{enumerate}
+	\item[1.] Rode $M$ sobre $w$. 
+	\item[2.] Se ela aceita, \textit{aceite}.''
+\end{enumerate}
+	
+	\item Dê como saída $\langle M_1, M_2 \rangle$''
+\end{enumerate}
+
+\end{frame}
+\begin{frame} \frametitle{ $\overline{EQ_{MT}}$ não é Turing-reconhecível }
+$A_{MT} \leq_m EQ_{MT}$.
+
+
+Vamos analisar por que isto funciona:
+
+\begin{itemize}
+\item $\langle M, w \rangle \in A_{MT} \rightarrow M$ aceita $w \rightarrow $ $L(M_2) = \Sigma^* \rightarrow$ $L(M_1) = L(M_2) \rightarrow$ $\langle M_1, M_2\rangle \in EQ_{MT}$ 
+
+\item $\langle M, w \rangle \notin A_{MT} \rightarrow M$ não aceita $w \rightarrow $ $L(M_2) = \oslash \rightarrow$ $L(M_1) \neq L(M_2) \rightarrow$ $\langle M_1, M_2\rangle \notin EQ_{MT}$ 
+
+\end{itemize}
+
+\end{frame}
+
+\begin{frame} \frametitle{ }
+
+A única diferença entre $f$ e $g$ está na máquina $M_1$. Em $f$, a máquina $M_1$ sempre rejeita enquento em $g$ ela sempre aceita. Em ambas $f$ e $g$, $M$ aceita $w$ sse $M_2$ sempre aceita. 
+\end{frame}
+
+\end{document}
+

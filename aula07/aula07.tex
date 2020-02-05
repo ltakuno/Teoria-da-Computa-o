@@ -1,0 +1,377 @@
+\documentclass{beamer}
+\usepackage[brazil]{babel}
+\usepackage[latin1]{inputenc}
+\usepackage[all]{xy}
+\usepackage{stmaryrd}
+\usepackage{verbatim}
+\usepackage{graphicx}
+\usepackage{indentfirst}
+\usepackage{float}
+\usepackage{psfrag}
+
+\usepackage{stmaryrd}
+
+\mode<presentation>{
+  
+  \usepackage{beamerthemesplit} 
+  %\usetheme[secheader]{Madrid}
+  %\usetheme{Antibes}
+  \usetheme{Warsaw}
+  %\usecolortheme{seagull}
+  %\usecolortheme{lily}
+  \usepackage{pgf,pgfarrows,pgfnodes,pgfautomata,pgfheaps,pgfshade}
+  \beamertemplatetransparentcovereddynamic
+  \beamertemplateballitem
+  \beamertemplatefootpagenumber
+  \setbeamertemplate{navigation symbols}{} 
+  %\useoutertheme{infolines} 
+  %\setbeamercolor{title}{fg=red!80!black}
+  %\setbeamercolor{normal text}{fg=red!80}
+}
+%
+\def\red{\color[rgb]{0.7,0,0}}
+\def\green{\color[rgb]{0,.8,0}}
+\def\darkgreen{\color[rgb]{0.1,0.4,0.0}}
+\let\dgreen\darkgreen
+\def\blue{\color[rgb]{0,0,.8}}
+\def\yellow{\color[rgb]{1,1,0}}
+\def\black{\color[rgb]{0,0,0}}
+
+\def\pink{\color[rgb]{1,0,1}}
+\def\brown{\color[rgb]{.5,.1,.3}}
+\def\lilaz{\color[rgb]{.5,0,.5}}
+\def\hmmm{\color[rgb]{.3,.1,.5}}
+\def\magenta{\color[rgb]{.6,.05,.05}}
+
+\title{Teoria da Computação \\ {Complexidade de Tempo}}
+\author{{Leonardo~Takuno}\\
+\texttt{\{leonardo.takuno@gmail.com\}}}
+\date{{\dgreen Centro Universitário Senac}}
+
+
+\begin{document}
+%\maketitle				% OPTIONAL
+
+\pgfdeclareimage[height=1.0cm]{logo}{logo.eps}
+\logo{\pgfuseimage{logo}}
+
+\frame{\titlepage}
+
+\frame{
+\frametitle{Sumário}
+\tableofcontents
+}
+
+\AtBeginSection[]
+{
+ \begin{frame}
+  \frametitle{Sumário}
+  \tableofcontents[currentsection]
+ \end{frame}
+}
+
+\section{Apresentação}
+
+\begin{frame} \frametitle{ Teoria da complexidade }
+Até agora investigamos se um problema é em princípio solucionável algoritmicamente, isto é, questionamos se
+uma linguagem particular é, 
+
+\begin{itemize}
+	\item Decidível: se a máquina pára sobre todas as entradas 
+  \item Turing-Reconhecíveis: se a máquina entra em loop sobre alguma entrada (funções parcialmente computáveis)
+\end{itemize}
+\end{frame}
+
+\begin{frame} \frametitle{ Teoria da complexidade }
+Entretanto, nós não investigamos o custo da computação - a quantidade de recursos que a computação utiliza (tempo, espaço, etc.). 
+
+A seguir, discutimos a complexidade de tempo e de espaço. Além disso, assumimos o tratamento de funções computáveis, isto é, a linguagem decidível. 
+
+\begin{itemize}
+	\item Se nós podemos resolver um certo problema P, quão fácil ou quão difícil é fazê-lo?
+	\item Teoria da complexidade tenta resolver esta questão.
+\end{itemize}
+\end{frame}
+
+\section{Recursos de tempo e espaço}
+
+\begin{frame} \frametitle{ Contagem de Recursos }
+
+\begin{center}
+\begin{tabular}{|p{9.5cm}|}
+\hline
+\\
+  \hspace{0.4cm} Teoria da Complexidade é a 'arte de contar recursos' \\
+  \\
+\hline
+\end{tabular}
+\end{center}
+\begin{itemize}
+  \item \textbf{Teoria da Complexidade:} Estudo de problemas computacionalmente viáveis (tratáveis) com recursos limitados.
+	\item \textbf{Complexidade de Tempo:} Quanto tempo é necessário para resolver a instância de um problema?
+	\item \textbf{Complexidade de Espaço:} Quantos bits de memória são necessários para a computação ?
+\end{itemize}
+\end{frame}
+
+\begin{frame} \frametitle{ Contagem de Recursos }
+
+Ex: $A = \{0^n 1^n | n \geq 0\}$
+
+\begin{itemize}
+	\item Claramente, a linguagem é decidível.
+	\item Quanto tempo uma máquina de Turing precisa para decidí-la?
+\end{itemize}
+\end{frame}
+
+\begin{frame} \frametitle{ Contagem de Recursos }
+\textbf{Exemplo:} Dada a linguagem decidível $A = \{0^k1^k|k \geq 0\}$ e uma MT M1 que a decide, onde
+
+M1 = "Sobre a cadeia de entrada w:
+\begin{enumerate}
+	\item   Faça uma varredura na fita e rejeite se um 0 é encontrado à direita de algum 1.
+   \item   Repita se existem ambos, 0s e 1s, na fita:
+   \item  \hspace{0.5cm}  Faça uma varredura na fita, cortando um único 0 e um único 1.
+ \item  Se nem 0s nem 1s restarem sobre a fita \textit{aceite}, caso contrário \textit{rejeite}"
+\end{enumerate}
+\end{frame}
+
+\begin{frame} \frametitle{ Questão }
+\begin{itemize}
+\item Quanto tempo MT M1 precisa para executar dada uma entrada?
+	\item O número de passos podem depender de uma série de parâmetros.
+\end{itemize}	
+\end{frame}
+
+\begin{frame} \frametitle{ Questão }
+\begin{itemize}
+	\item Exemplo: Se a entrada fosse um grafo, poderia depender do número de 
+	
+\begin{itemize}
+	\item Nós
+	\item Arestas
+	\item Grau máximo
+	\item Todos, ou alguns fatores combinados.
+\end{itemize}
+\end{itemize}
+\end{frame}
+\section{Complexidade de tempo}
+\begin{frame} \frametitle{ Complexidade de Tempo }
+\begin{center}
+\begin{tabular}{|p{10cm}|}
+\hline
+\textbf{Definição}: Seja M uma MT determinística que pára sobre todas as entradas. O \textbf{tempo de execução} ou \textbf{complexidade de tempo} de M é a função 
+
+$$f: N \rightarrow N,$$ 
+
+onde $f(n)$  é o número de passos que M usa sobre qualquer entrada de tamanho $n$. 
+
+Se $f(n)$ é o tempo de execução de M, então dizemos que M executa em tempo $f(n)$ e que M é uma MT de tempo $f(n)$. Como de costume usaremos $n$ para representar o tamanho da entrada. \\
+\hline
+\end{tabular}
+\end{center}
+
+\end{frame}
+
+\begin{frame} \frametitle{ Complexidade de Tempo }
+
+Nossa complexidade de tempo é chamado de \textbf{análise de pior caso} pois consideraremos somente o \textbf{número máximo de passos} que uma máquina usa para uma entrada $n$.
+
+\end{frame}
+\section{Notação assintótica}
+\begin{frame} \frametitle{ Notação O-grande}
+\begin{center}
+\begin{tabular}{|p{10cm}|}
+\hline
+\textbf{Definição}: Sejam $f$ e $g$ funções $f,g : N \rightarrow R^+$. Dizemos que $f(n) = O(g(n))$ se existirem inteiros positivos $c$ e $n_0$ tal que para todo inteiro $n \geq n_0$, 
+$$f(n) \leq c g(n).$$
+Quando $f(n) = O(g(n))$ dizemos que $g(n)$ é um \textbf{limitante superior (assintótico)} para $f(n)$. \\
+\hline
+\end{tabular}
+\end{center}
+\end{frame}
+
+\begin{frame} \frametitle{ Notação O-grande (Exemplo)}
+Seja $f(n) = 5n^3+2n^2+22n+6$, então só considerando o termo de mais alta ordem e desconsiderando todas as constantes e coeficientes temos:
+$$f(n) = O(n^3).$$
+
+Podemos mostrar que isto satisfaz nossa definição formal de análise assintótica com $c=6$ e $n_0=10$. Então para qualquer $n > 10$ temos $f(n) \leq 6n^3$.
+\end{frame}
+
+\begin{frame} \frametitle{ Notação O-grande}
+\begin{itemize}
+\item Seja $f(n) = 3n \log_2 n + 5n + 3$, então $f(n) = O(n \log n)$. Note que eliminamos a base pois $\log_b n = \frac{1}{\log_2 b} \log_2 n$ para qualquer base $b$, ou seja, diferentes logaritmos estão relacionados por um fator constante.
+
+\item $f(n) = O(n^2) + O(n) \Rightarrow f(n) = O(n^2)$
+
+\item $f(n) = 2^{O(n)} \Rightarrow f(n) \leq 2^{cn}$ para algum $c$ e algum valor $n_0$ tal que $n > n_0$
+\end{itemize}
+\end{frame}
+
+\begin{frame} \frametitle{ Notação O-grande}
+\begin{itemize}
+\item  Limitantes da forma $O(n^k)$ onde $k > 0$ são  chamados \textbf{limitantes polinomiais}. 
+
+\item Limitantes da forma $2^{O(n^k)}$ onde $k > 0$ são chamados \textbf{limitantes exponenciais}.
+
+\end{itemize}
+\end{frame}
+
+\begin{frame} \frametitle{ Analisando algoritmos}
+Dado a linguagem $A = \{0^k 1^k | k \geq 0\}$ e a MT M1 que a decide, onde
+
+M1 = "Sobre a cadeia de entrada w:
+\begin{enumerate}
+	\item   Faça uma varredura na fita e rejeite se um 0 é encontrado à direita de algum 1.
+   \item   Repita se existem ambos, 0s e 1s, na fita:
+   \item  \hspace{0.5cm}  Faça uma varredura na fita, cortando um único 0 e um único 1.
+ \item  Se nem 0s nem 1s restarem sobre a fita \textit{aceite}, caso contrário \textit{rejeite}"
+ 
+\end{enumerate}
+ \end{frame}
+
+\begin{frame} \frametitle{ Analisando algoritmos}
+Para analizar a complexidade de tempo dessa máquina analisamos separadamente cada estágio.
+
+\begin{itemize}
+\item \textbf{estágio 1}: A máquina varre a fita para verificar que a entrada é da forma $0^*1^*$.  Executando esta varredura usa $n$ passos onde $n$ é o tamanho da entrada. Reposicionando a cabeça para o início da fita que toma outros $n$ passos. Portanto, este estágio toma $2n$  ou $O(n)$ passos
+\end{itemize}
+\end{frame}
+
+\begin{frame} \frametitle{ Analisando algoritmos}
+\begin{itemize}
+\item \textbf{estágio 2,3}: Aqui a máquina varre a entrada repetidamente. Cada varredura toma $O(n)$. Como cada varredura corta dois símbolos por vez, ocorrem pelo menos $n/2$ varreduras. Ou seja $(n/2)O(n) = O(n^2)$
+\end{itemize}
+\end{frame}
+
+\begin{frame} \frametitle{ Analisando algoritmos}
+\begin{itemize}
+\item \textbf{estágio 4}: A máquina faz uma simples varredura para decidir se aceita ou rejeita - $O(n)$ passos.
+\end{itemize}
+\end{frame}
+
+\begin{frame} \frametitle{ Analisando algoritmos}
+A complexidade tempo total de M1 sobre a entrada $n$ é $2O(n) + O(n^2) = O(n^2)$. Podemos encontrar um algoritmo ou modelo computacional mais rápido?
+\end{frame}
+
+\begin{frame} \frametitle{ Analisando algoritmos}
+Considere a máquina de 2-fitas M2
+
+M2 = "Sobre a cadeia de entrada w:
+\begin{enumerate}
+	\item Faça uma varredura na fita 1 e rejeite se um 0 é encontrado à direita de algum 1.
+   \item  Faça uma varredura nos 0s sobre a fita 1 até o  primeiro 1. Ao mesmo tempo, copie os 0s para a fita 2.
+   \item Faça uma varredura nos 1s sobre a fita 1 até o final da entrada. Para cada 1 lido sobre a fita 1, corte um 0 sobre a fita 2. Se todos os 0s estiverem cortados antes que todos os 1s sejam lidos, rejeite.
+   \item Se todos os 0s tiverem sido cortados, aceite. Se restar algum 0, rejeite."
+ 
+\end{enumerate}
+\end{frame}
+
+\begin{frame} \frametitle{ Analisando algoritmos}
+É fácil ver que cada estágio da máquina toma $O(n)$ passos - complexidade de tempo é $O(n)$ ou linear!
+\end{frame}
+
+\begin{frame} \frametitle{ Analisando algoritmos}
+\begin{itemize}
+\item É interessante notar que mesmo que a computabilidade não dependa do modelo preciso de computação escolhido - a complexidade de tempo depende! 
+\item Vimos que ambos M1 e M2, decidem a linguagem $A$, mas M1 decide com complexidade de tempo $O(n^2)$ e M2 decide a linguagem em complexidade $O(n)$.
+\end{itemize}
+ \end{frame}
+
+\begin{frame} \frametitle{ Notação o-pequeno} 
+ \begin{center}
+\begin{tabular}{|p{10.0cm}|}
+\hline
+\textbf{Definição}: Sejam $f$ e $g$ funções $f,g : N \rightarrow R^+$. Dizemos que $f(n) = o(g(n))$ se 
+
+$$
+\lim_{n \to \infty} \frac{f(n)}{g(n)} = 0
+$$
+Em outras palavras, $f(n) = o(g(n))$ significa que, para qualquer número real $c > 0$, existe um número $n_0$, onde 
+$f(n) < c g(n)$ para $n \geq n_0$. \\
+\hline
+\end{tabular}
+\end{center}
+
+Na notação O-grande a relação é ``menor ou igual'' enquanto a notação o-pequeno a relação é ``estritamente menor''.
+ \end{frame}
+
+\begin{frame} \frametitle{ Notação o-pequeno} 
+\begin{itemize}
+	\item Limite superior não justo.
+	\item $2n = o(n^2)$, mas $2n^2 \neq o(n^2)$
+	\item É fácil observar que:
+	
+\begin{itemize}
+	\item se $f(n) = o(g(n))$ então $f(n) = O(g(n))$
+\end{itemize}
+\end{itemize}
+ \end{frame}
+
+\begin{frame} \frametitle{ Notação o-pequeno (Exemplo)} 
+Mostre que $2n$ é $o(n^2)$.
+
+De acordo com a nossa definição da notação $o$, nós temos que encontrar uma constante real $c$ e uma constante
+inteira $n_0$ tais que $c > 0$ e $n_0 \geq 1$, e 
+
+$$2n < c \cdot n^2$$
+
+para todo $n \geq n_0$.
+
+Intuitivamente, na notação $o$, a função $f(n)$ torna-se insignificante em relação a $g(n)$ quando $n$ vai para o infinito.
+
+$$
+\lim_{n \to \infty} \frac{2n}{n^2} = \lim_{n \to \infty} \frac{2}{n} =0
+$$
+
+Portanto, $n = o(n^2)$
+ \end{frame}
+ 
+ 
+
+\section{Relacionamento entre modelos de MT}
+
+\begin{frame} \frametitle{Relacionamento entre modelos de MT (única fita vs multifita)}
+\begin{center}
+\begin{tabular}{|p{10cm}|}
+\hline
+\textbf{Teorema}: Seja $t(n)$ uma função, onde $t(n) \geq n$. Então toda máquina de Turing multifita de tempo $t(n)$ tem uma máquina de Turing de uma única fita equivalente de tempo $O(t^2(n))$.
+\\
+\hline
+\end{tabular}
+\end{center}
+\textbf{Idéia da prova:} É possível mostrar que a simulação de cada passo de computação da máquina de multifita em uma máquina de uma máquina de fita única usa, no máximo, $O(t(n))$ passos. Portanto, para simular a computação completa de uma máquina multifita em uma máquina de fita única levaria $O(t^2(n))$ passos.
+ \end{frame}
+
+\begin{frame} \frametitle{ Complexidade de tempo não-determinístico}
+\begin{center}
+\begin{tabular}{|p{10cm}|}
+\hline
+\textbf{Definição}: Seja $N$ uma máquina de Turing não-determinística decisora. O \textbf{tempo de execução} de $N$ é a função $f: N \rightarrow  N$, onde $f(n)$ é o número máximo de passos que $N$ usa sobre qualquer ramo de sua computação sobre qualquer entrada de comprimento $n$.  
+\\
+\hline
+\end{tabular}
+\end{center}
+ \end{frame}
+
+\begin{frame} \frametitle{ Complexidade de tempo não-determinístico}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=.9\textwidth]{fig01}
+\end{figure}
+\end{frame}
+ 
+ 
+ \begin{frame} \frametitle{Relacionamento entre modelos de MT}
+\begin{center}
+\begin{tabular}{|p{10cm}|}
+\hline
+\textbf{Teorema}: Seja $t(n)$ uma função, onde $t(n) \geq n$, então para toda máquina de Turing não-determinística de fita única de tempo $t(n)$ existe uma máquina de Turing de fita única  determinística equivalente de tempo $2^{O(t(n))}$.
+\\
+\hline
+\end{tabular}
+\end{center}
+\textbf{Idéia da prova:}  Lembrar que a simulação de uma MT não-determinística em uma MT determinística pode ser visto como uma busca em uma árvore de computação não-determinística por estados de aceitação. Como a MTnão-determinística é uma máquina de tempo $O(t(n))$, então o caminho da raiz até as folhas é limitado por $O(t(n))$ passos. A busca por um estado de aceitação é uma operação exponencial limitado por $2^{O(t(n))}$ passos.
+ \end{frame}
+
+\end{document}
+

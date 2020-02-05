@@ -1,0 +1,6 @@
+\babel@toc {brazil}{}
+\beamer@sectionintoc {1}{Apresenta\c c\~ao}{3}{0}{1}
+\beamer@sectionintoc {2}{Redutibilidade}{5}{0}{2}
+\beamer@sectionintoc {3}{ Teorema de Rice }{24}{0}{3}
+\beamer@sectionintoc {4}{ Redu\c c\~oes via Hist\'orias de Computa\c c\~ao }{30}{0}{4}
+\beamer@sectionintoc {5}{ Problemas indecid\IeC {\'\i }veis sobre GLCs }{42}{0}{5}
